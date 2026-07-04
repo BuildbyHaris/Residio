@@ -12,3 +12,7 @@ module.exports = {
   generateVerificationToken,
   generateVerificationExpiry,
 };
+
+console.log(generateVerificationToken());
+console.log(generateVerificationToken());
+console.log(generateVerificationToken());
