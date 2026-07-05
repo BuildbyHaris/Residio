@@ -103,3 +103,31 @@ body {
     font-size: 14px;
   }
 }
+.password-field {
+  position: relative;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.password-field input {
+  width: 100%;
+  padding: 12px;
+  padding-right: 45px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
+}
+
+.eye-icon:hover {
+  color: #2563eb;
+}

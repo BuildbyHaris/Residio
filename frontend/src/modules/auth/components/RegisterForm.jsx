@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signup } from "../services/authService";
 import "./RegisterForm.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +16,8 @@ const RegisterForm = () => {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   // Client-side Validation
   const validate = () => {
     let newErrors = {};
@@ -167,22 +169,42 @@ const RegisterForm = () => {
           <option value="owner">Hostel Owner</option>
         </select>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+    <div className="password-field">
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Password"
+    value={formData.password}
+    onChange={handleChange}
+  />
+
+  <span
+    className="eye-icon"
+    onClick={() => setShowPassword(!showPassword)}
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+</div>
         <small>{errors.password}</small>
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
+ <div className="password-field">
+  <input
+    type={showConfirmPassword ? "text" : "password"}
+    name="confirmPassword"
+    placeholder="Confirm Password"
+    value={formData.confirmPassword}
+    onChange={handleChange}
+  />
+
+  <span
+    className="eye-icon"
+    onClick={() =>
+      setShowConfirmPassword(!showConfirmPassword)
+    }
+  >
+    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+</div>
         <small>{errors.confirmPassword}</small>
 
         <button type="submit" disabled={loading}>
