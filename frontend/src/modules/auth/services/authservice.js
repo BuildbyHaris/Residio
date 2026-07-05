@@ -1,6 +1,19 @@
-import api from '../api/authApi';
+import { registerUser } from "../api/authApi";
 
-export const registerUser = async (formData) => {
-  const response = await api.post('/auth/register', formData);
-  return response.data;
+export const signup = async (userData) => {
+  try {
+    const response = await registerUser(userData);
+
+    return {
+      success: true,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Something went wrong",
+      errors: error.response?.data?.errors || [],
+    };
+  }
 };

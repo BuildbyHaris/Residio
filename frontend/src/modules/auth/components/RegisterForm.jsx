@@ -1,152 +1,199 @@
-import React, { useState } from 'react';
-import { registerUser } from '../services/authService';
-
-const initialForm = { name: '', email: '', password: '', confirmPassword: '' };
+import { useState } from "react";
+import { signup } from "../services/authService";
+import "./RegisterForm.css";
 
 const RegisterForm = () => {
-  const [form, setForm] = useState(initialForm);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    role: "student",
+  });
+
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [serverMessage, setServerMessage] = useState({ type: '', text: '' });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: '' }));
-  };
-
+  // Client-side Validation
   const validate = () => {
-    const newErrors = {};
+    let newErrors = {};
 
-    if (!form.name.trim()) {
-      newErrors.name = 'Name is required';
-    } else if (form.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+    // Name
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (!/^[A-Za-z ]+$/.test(formData.name)) {
+      newErrors.name = "Only alphabets are allowed";
     }
 
-    if (!form.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = 'Enter a valid email address';
+    // Email
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)
+    ) {
+      newErrors.email = "Invalid email address";
     }
 
-    if (!form.password) {
-      newErrors.password = 'Password is required';
-    } else if (form.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(form.password)) {
-      newErrors.password = 'Password must contain letters and numbers';
+    // Phone
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^\+92\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be like +923234113114";
     }
 
-    if (!form.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (form.confirmPassword !== form.password) {
-      newErrors.confirmPassword = 'Passwords do not match';
+    // Password
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    // Confirm Password
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (formData.confirmPassword !== formData.password) {
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
+    setErrors({
+      ...errors,
+      [e.target.name]: "",
+    });
+
+    setMessage("");
+  };
+
+  // Handle Form Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerMessage({ type: '', text: '' });
+
+    setMessage("");
 
     if (!validate()) return;
 
     setLoading(true);
-    try {
-      const { name, email, password } = form;
-      const res = await registerUser({ name, email, password });
 
-      setServerMessage({
-        type: 'success',
-        text: res.message || 'Registration successful!',
+    const result = await signup({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+      role: formData.role,
+    });
+
+    setLoading(false);
+
+    if (result.success) {
+      setMessage(result.message);
+
+      setErrors({});
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        role: "student",
       });
-      setForm(initialForm);
-    } catch (err) {
-      const response = err.response?.data;
-      if (response?.errors?.length) {
-        setServerMessage({ type: 'error', text: response.errors.join(', ') });
-      } else {
-        setServerMessage({
-          type: 'error',
-          text: response?.message || 'Something went wrong. Please try again.',
+    } else {
+      let backendErrors = {};
+
+      if (result.errors && result.errors.length > 0) {
+        result.errors.forEach((error) => {
+          backendErrors[error.field] = error.message;
         });
+
+        setErrors(backendErrors);
       }
-    } finally {
-      setLoading(false);
+
+      setMessage(result.message);
     }
   };
 
   return (
-    <form className="register-form" onSubmit={handleSubmit} noValidate>
-      <h2>Create an Account</h2>
+    <div className="register-container">
+      <form className="register-form" onSubmit={handleSubmit}>
+        <h2>Create Account</h2>
 
-      {serverMessage.text && (
-        <div className={`alert alert-${serverMessage.type}`}>
-          {serverMessage.text}
-        </div>
-      )}
-
-      <div className="form-group">
-        <label htmlFor="name">Full Name</label>
         <input
-          id="name"
-          name="name"
           type="text"
-          value={form.name}
+          name="name"
+          placeholder="Full Name"
+          value={formData.name}
           onChange={handleChange}
-          placeholder="Enter your full name"
         />
-        {errors.name && <span className="field-error">{errors.name}</span>}
-      </div>
+        <small>{errors.name}</small>
 
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
         <input
-          id="email"
-          name="email"
           type="email"
-          value={form.email}
+          name="email"
+          placeholder="Email Address"
+          value={formData.email}
           onChange={handleChange}
-          placeholder="Enter your email"
         />
-        {errors.email && <span className="field-error">{errors.email}</span>}
-      </div>
+        <small>{errors.email}</small>
 
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
         <input
-          id="password"
+          type="text"
+          name="phone"
+          placeholder="+923234113114"
+          value={formData.phone}
+          onChange={handleChange}
+        />
+        <small>{errors.phone}</small>
+
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+        >
+          <option value="student">Student</option>
+          <option value="owner">Hostel Owner</option>
+        </select>
+
+        <input
+          type="password"
           name="password"
-          type="password"
-          value={form.password}
+          placeholder="Password"
+          value={formData.password}
           onChange={handleChange}
-          placeholder="Create a password"
         />
-        {errors.password && <span className="field-error">{errors.password}</span>}
-      </div>
+        <small>{errors.password}</small>
 
-      <div className="form-group">
-        <label htmlFor="confirmPassword">Confirm Password</label>
         <input
-          id="confirmPassword"
-          name="confirmPassword"
           type="password"
-          value={form.confirmPassword}
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
           onChange={handleChange}
-          placeholder="Re-enter your password"
         />
-        {errors.confirmPassword && (
-          <span className="field-error">{errors.confirmPassword}</span>
-        )}
-      </div>
+        <small>{errors.confirmPassword}</small>
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Registering...' : 'Register'}
-      </button>
-    </form>
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating Account..." : "Sign Up"}
+        </button>
+
+        
+        {message && <p className="message">{message}</p>}
+        
+      </form>
+    </div>
   );
 };
 
