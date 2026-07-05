@@ -13,6 +13,3 @@ module.exports = {
   generateVerificationExpiry,
 };
 
-console.log(generateVerificationToken());
-console.log(generateVerificationToken());
-console.log(generateVerificationToken());
