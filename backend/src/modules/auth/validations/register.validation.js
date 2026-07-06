@@ -75,21 +75,3 @@ export const registerValidationSchema = Joi.object({
     }),
 });
 
-// Validation Error Handler Middleware
-export const validate = (req, res, next) => {
-  // abortEarly: false ensures all validation errors are captured, not just the first one
-  const { error } = registerValidationSchema.validate(req.body, { abortEarly: false });
-
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      message: "Validation Error",
-      errors: error.details.map((err) => ({
-        field: err.path.join("."),
-        message: err.message,
-      })),
-    });
-  }
-
-  next();
-};

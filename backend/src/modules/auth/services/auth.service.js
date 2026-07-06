@@ -1,42 +1,49 @@
 import bcrypt from "bcrypt";
 import { env } from "../../../config/env.js";
+
 import {
   findUserByEmail,
   findUserByPhone,
   createUser,
   savePasswordResetToken,
+  clearPasswordResetToken,
 } from "../repositories/auth.repository.js";
 
 import { generateResetToken } from "../utils/token.js";
 import { hashResetToken } from "../utils/hashToken.js";
+
 import { sendEmail } from "../../../shared/services/email.service.js";
 import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
 
 import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
 
+/**
+ * Register User
+ */
 export const registerUser = async (userData) => {
   const { name, email, phone, password, role } = userData;
 
-  // Check Duplicate Email
+  // Check duplicate email
   const existingEmail = await findUserByEmail(email);
 
   if (existingEmail) {
     throw new Error("Email already exists");
   }
 
-  // Check Duplicate Phone
+  // Check duplicate phone
   const existingPhone = await findUserByPhone(phone);
 
   if (existingPhone) {
     throw new Error("Phone number already exists");
   }
 
-  // Hash Password
+  // Hash password
   const hashedPassword = await bcrypt.hash(
     password,
     env.bcryptSaltRounds
   );
-  // Create User
+
+  // Create user
   const user = await createUser({
     name,
     email,
@@ -45,7 +52,6 @@ export const registerUser = async (userData) => {
     role,
   });
 
-  // Return Response (Never return password)
   return {
     id: user._id,
     name: user.name,
@@ -56,6 +62,9 @@ export const registerUser = async (userData) => {
   };
 };
 
+/**
+ * Forgot Password
+ */
 export const forgotPassword = async (email) => {
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -63,28 +72,34 @@ export const forgotPassword = async (email) => {
 
   const GENERIC_RESET_MESSAGE =
     "If an account with that email exists, a password reset link has been sent.";
+
+  // Prevent email enumeration
   if (!user) {
     return {
       success: true,
-      message:
-        GENERIC_RESET_MESSAGE,
+      message: GENERIC_RESET_MESSAGE,
     };
   }
+
+  // Generate reset token
   const resetToken = generateResetToken();
 
+  // Hash token before saving
   const hashedResetToken = hashResetToken(resetToken);
 
+  // Expiry time
   const passwordResetExpires = new Date(
     Date.now() + env.passwordResetExpiryMinutes * 60 * 1000
   );
 
+  // Save hashed token
   await savePasswordResetToken({
     email: normalizedEmail,
     passwordResetToken: hashedResetToken,
     passwordResetExpires,
   });
-};
 
+<<<<<<< HEAD
 // export const savePasswordResetToken = async ({
 //   email,
 //   passwordResetToken,
@@ -99,40 +114,34 @@ export const forgotPassword = async (email) => {
 //     { new: true }
 //   );
 // };
+=======
+  // Frontend reset URL
+  const resetUrl = `${env.frontendUrl}/reset-password/${resetToken}`;
+>>>>>>> a47e5fb4ae131d3aa436301266b6bfb0ff91e147
 
-const passwordResetExpires = new Date(
-  Date.now() + env.passwordResetExpiryMinutes * 60 * 1000
-);
-
-await savePasswordResetToken({
-  email: normalizedEmail,
-  passwordResetToken: hashedResetToken,
-  passwordResetExpires,
-});
-
-const resetUrl =
-  `${env.frontendUrl}/reset-password/${resetToken}`;
-
-const html = forgotPasswordTemplate({
-  userName: user.name,
-  resetUrl,
-});
-
-try {
-  await sendEmail({
-    to: user.email,
-    subject: AUTH_EMAIL_SUBJECTS.FORGOT_PASSWORD,
-    html,
+  // Email HTML
+  const html = forgotPasswordTemplate({
+    userName: user.name,
+    resetUrl,
   });
-} catch (error) {
-  await clearPasswordResetToken(normalizedEmail);
 
-  throw new Error(
-    "Unable to send password reset email. Please try again."
-  );
-}
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: AUTH_EMAIL_SUBJECTS.FORGOT_PASSWORD,
+      html,
+    });
+  } catch (error) {
+    // Remove token if email fails
+    await clearPasswordResetToken(normalizedEmail);
 
-return {
-  success: true,
-  message: GENERIC_RESET_MESSAGE
-} 
+    throw new Error(
+      "Unable to send password reset email. Please try again."
+    );
+  }
+
+  return {
+    success: true,
+    message: GENERIC_RESET_MESSAGE,
+  };
+};
