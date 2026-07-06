@@ -85,20 +85,20 @@ export const forgotPassword = async (email) => {
   });
 };
 
-export const savePasswordResetToken = async ({
-  email,
-  passwordResetToken,
-  passwordResetExpires,
-}) => {
-  return await User.findOneAndUpdate(
-    { email },
-    {
-      passwordResetToken,
-      passwordResetExpires,
-    },
-    { new: true }
-  );
-};
+// export const savePasswordResetToken = async ({
+//   email,
+//   passwordResetToken,
+//   passwordResetExpires,
+// }) => {
+//   return await User.findOneAndUpdate(
+//     { email },
+//     {
+//       passwordResetToken,
+//       passwordResetExpires,
+//     },
+//     { new: true }
+//   );
+// };
 
 const passwordResetExpires = new Date(
   Date.now() + env.passwordResetExpiryMinutes * 60 * 1000
