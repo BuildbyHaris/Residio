@@ -57,3 +57,14 @@ export const forgotPasswordController = async (req, res) => {
     });
   }
 };
+
+export const resetPasswordController = async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      message: "Reset Password endpoint is under development.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
