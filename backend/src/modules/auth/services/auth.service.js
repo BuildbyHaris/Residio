@@ -7,19 +7,11 @@ import {
   savePasswordResetToken,
 } from "../repositories/auth.repository.js";
 
-<<<<<<< Updated upstream
 import { generateResetToken } from "../utils/token.js";
 import { hashResetToken } from "../utils/hashToken.js";
 import { sendEmail } from "../../../shared/services/email.service.js";
 import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
 import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
-=======
-
-// import { sendEmail } from "../../../shared/services/email.service.js";
-// import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
-
-// import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
->>>>>>> Stashed changes
 
 export const registerUser = async (userData) => {
   console.log("✅ registerUser() called");
@@ -102,8 +94,25 @@ export const forgotPassword = async (email) => {
     passwordResetExpires,
   });
 
+<<<<<<< HEAD
   // Reset URL
   const resetUrl = `${env.frontendUrl}/reset-password/${resetToken}`;
+=======
+// export const savePasswordResetToken = async ({
+//   email,
+//   passwordResetToken,
+//   passwordResetExpires,
+// }) => {
+//   return await User.findOneAndUpdate(
+//     { email },
+//     {
+//       passwordResetToken,
+//       passwordResetExpires,
+//     },
+//     { new: true }
+//   );
+// };
+>>>>>>> 44549aa (Your commit message)
 
   // Email Template
   const html = forgotPasswordTemplate({
