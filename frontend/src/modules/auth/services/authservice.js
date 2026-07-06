@@ -3,7 +3,7 @@ import {
   loginApi,
   forgotPasswordApi,
   resetPasswordApi,
-} from "../api/auth.api";
+} from "../api/authApi";
 
 /**
  * Register User

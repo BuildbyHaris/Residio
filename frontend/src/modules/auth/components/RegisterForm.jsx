@@ -8,6 +8,7 @@ const RegisterForm = () => {
     name: "",
     email: "",
     phone: "",
+    gender: "other",
     password: "",
     confirmPassword: "",
     role: "student",
@@ -43,6 +44,10 @@ const RegisterForm = () => {
       newErrors.phone = "Phone number is required";
     } else if (!/^\+92\d{10}$/.test(formData.phone)) {
       newErrors.phone = "Phone number must be like +923234113114";
+    }
+    // Gender
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
     }
 
     // Password
@@ -93,6 +98,7 @@ const RegisterForm = () => {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
+      gender: formData.gender,
       password: formData.password,
       confirmPassword: formData.confirmPassword,
       role: formData.role,
@@ -109,6 +115,7 @@ const RegisterForm = () => {
         name: "",
         email: "",
         phone: "",
+        gender: "other",
         password: "",
         confirmPassword: "",
         role: "student",
@@ -159,7 +166,18 @@ const RegisterForm = () => {
           onChange={handleChange}
         />
         <small>{errors.phone}</small>
+        <select
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+        >
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
 
+        <small>{errors.gender}</small>
         <select
           name="role"
           value={formData.role}
@@ -169,51 +187,51 @@ const RegisterForm = () => {
           <option value="owner">Hostel Owner</option>
         </select>
 
-    <div className="password-field">
-  <input
-    type={showPassword ? "text" : "password"}
-    name="password"
-    placeholder="Password"
-    value={formData.password}
-    onChange={handleChange}
-  />
+        <div className="password-field">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
 
-  <span
-    className="eye-icon"
-    onClick={() => setShowPassword(!showPassword)}
-  >
-    {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </span>
-</div>
+          <span
+            className="eye-icon"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
         <small>{errors.password}</small>
 
- <div className="password-field">
-  <input
-    type={showConfirmPassword ? "text" : "password"}
-    name="confirmPassword"
-    placeholder="Confirm Password"
-    value={formData.confirmPassword}
-    onChange={handleChange}
-  />
+        <div className="password-field">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
 
-  <span
-    className="eye-icon"
-    onClick={() =>
-      setShowConfirmPassword(!showConfirmPassword)
-    }
-  >
-    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-  </span>
-</div>
+          <span
+            className="eye-icon"
+            onClick={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
+          >
+            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
         <small>{errors.confirmPassword}</small>
 
         <button type="submit" disabled={loading}>
           {loading ? "Creating Account..." : "Sign Up"}
         </button>
 
-        
+
         {message && <p className="message">{message}</p>}
-        
+
       </form>
     </div>
   );

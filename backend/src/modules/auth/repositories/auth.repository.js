@@ -1,4 +1,4 @@
-import User from "../../../models/user.model.js";
+import User from "../models/User.js";
 
 /**
  * Find user by email
