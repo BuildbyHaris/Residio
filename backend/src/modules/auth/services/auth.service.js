@@ -1,18 +1,24 @@
 import bcrypt from "bcrypt";
 import { env } from "../../../config/env.js";
+
 import {
   findUserByEmail,
   findUserByPhone,
   createUser,
   savePasswordResetToken,
+  clearPasswordResetToken,
 } from "../repositories/auth.repository.js";
 
 import { generateResetToken } from "../utils/token.js";
 import { hashResetToken } from "../utils/hashToken.js";
+
 import { sendEmail } from "../../../shared/services/email.service.js";
 import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
 import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
 
+/**
+ * Register User
+ */
 export const registerUser = async (userData) => {
   console.log("✅ registerUser() called");
   console.log("User Data:", userData);
@@ -21,27 +27,27 @@ export const registerUser = async (userData) => {
 
 
 
-  // Check Duplicate Email
+  // Check duplicate email
   const existingEmail = await findUserByEmail(email);
 
   if (existingEmail) {
     throw new Error("Email already exists");
   }
 
-  // Check Duplicate Phone
+  // Check duplicate phone
   const existingPhone = await findUserByPhone(phone);
 
   if (existingPhone) {
     throw new Error("Phone number already exists");
   }
 
-  // Hash Password
+  // Hash password
   const hashedPassword = await bcrypt.hash(
     password,
     env.bcryptSaltRounds
   );
 
-  // Create User
+
   const user = await createUser({
     name,
     email,
@@ -51,7 +57,7 @@ export const registerUser = async (userData) => {
     role,
   });
 
-  // Return Response
+
   return {
     id: user._id,
     name: user.name,
@@ -63,6 +69,9 @@ export const registerUser = async (userData) => {
   };
 };
 
+/**
+ * Forgot Password
+ */
 export const forgotPassword = async (email) => {
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -71,6 +80,7 @@ export const forgotPassword = async (email) => {
   const GENERIC_RESET_MESSAGE =
     "If an account with that email exists, a password reset link has been sent.";
 
+  // Prevent email enumeration
   if (!user) {
     return {
       success: true,
@@ -78,49 +88,33 @@ export const forgotPassword = async (email) => {
     };
   }
 
-  // Generate Reset Token
+  // Generate reset token
   const resetToken = generateResetToken();
+
+  // Hash token before saving
   const hashedResetToken = hashResetToken(resetToken);
 
-  // Expiry Time
+  // Expiry time
   const passwordResetExpires = new Date(
     Date.now() + env.passwordResetExpiryMinutes * 60 * 1000
   );
 
-  // Save Token in Database
+  // Save hashed token
   await savePasswordResetToken({
     email: normalizedEmail,
     passwordResetToken: hashedResetToken,
     passwordResetExpires,
   });
 
-<<<<<<< HEAD
-  // Reset URL
+  // Frontend reset URL
   const resetUrl = `${env.frontendUrl}/reset-password/${resetToken}`;
-=======
-// export const savePasswordResetToken = async ({
-//   email,
-//   passwordResetToken,
-//   passwordResetExpires,
-// }) => {
-//   return await User.findOneAndUpdate(
-//     { email },
-//     {
-//       passwordResetToken,
-//       passwordResetExpires,
-//     },
-//     { new: true }
-//   );
-// };
->>>>>>> 44549aa (Your commit message)
 
-  // Email Template
+  // Email HTML
   const html = forgotPasswordTemplate({
     userName: user.name,
     resetUrl,
   });
 
-  // Send Email
   try {
     await sendEmail({
       to: user.email,
@@ -128,6 +122,8 @@ export const forgotPassword = async (email) => {
       html,
     });
   } catch (error) {
+    await clearPasswordResetToken(normalizedEmail);
+
     throw new Error(
       "Unable to send password reset email. Please try again."
     );

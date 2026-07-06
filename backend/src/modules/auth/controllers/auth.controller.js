@@ -59,13 +59,13 @@ export const forgotPasswordController = async (req, res) => {
       message: error.message,
     });
   }
-<<<<<<< Updated upstream
-=======
+
 };
 
 /**
  * Reset Password
  */
+
 export const resetPasswordController = async (req, res, next) => {
   try {
     return res.status(200).json({
@@ -75,5 +75,5 @@ export const resetPasswordController = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
->>>>>>> Stashed changes
+
 };

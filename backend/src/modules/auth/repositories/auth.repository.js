@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+
 /**
  * Find user by email
  */
@@ -110,6 +111,22 @@ export const updateUserPassword = async ({
     userId,
     {
       password,
+      passwordResetToken: null,
+      passwordResetExpires: null,
+    },
+    {
+      new: true,
+    }
+  );
+};
+
+/**
+ * Clear password reset token
+ */
+export const clearPasswordResetToken = async (email) => {
+  return await User.findOneAndUpdate(
+    { email },
+    {
       passwordResetToken: null,
       passwordResetExpires: null,
     },
