@@ -1,5 +1,11 @@
-import { registerUser } from "../services/auth.service.js";
+import {
+  registerUser,
+  forgotPassword,
+} from "../services/auth.service.js";
 
+/**
+ * Register User
+ */
 export const register = async (req, res) => {
   try {
     const user = await registerUser(req.body);
@@ -26,11 +32,28 @@ export const register = async (req, res) => {
       });
     }
 
-    // Internal Server Error
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
       error: error.message,
+    });
+  }
+};
+
+/**
+ * Forgot Password
+ */
+export const forgotPasswordController = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const result = await forgotPassword(email);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

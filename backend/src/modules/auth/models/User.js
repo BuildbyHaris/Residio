@@ -39,6 +39,15 @@ const userSchema = new mongoose.Schema(
       minlength: [8, "Password must be at least 8 characters"],
       select: false,
     },
+    passwordResetToken: {
+      type: String,
+      default: null,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+      default: null,
+    },
 
     role: {
       type: String,
@@ -47,7 +56,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-  
+
     isVerified: {
       type: Boolean,
       default: false,

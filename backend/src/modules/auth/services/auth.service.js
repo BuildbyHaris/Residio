@@ -1,9 +1,18 @@
 import bcrypt from "bcrypt";
+import { env } from "../../../config/env.js";
 import {
   findUserByEmail,
   findUserByPhone,
   createUser,
-} from "../repositories/auth.respository.js";
+  savePasswordResetToken,
+} from "../repositories/auth.repository.js";
+
+import { generateResetToken } from "../utils/token.js";
+import { hashResetToken } from "../utils/hashToken.js";
+import { sendEmail } from "../../../shared/services/email.service.js";
+import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
+
+import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
 
 export const registerUser = async (userData) => {
   const { name, email, phone, password, role } = userData;
@@ -23,8 +32,10 @@ export const registerUser = async (userData) => {
   }
 
   // Hash Password
-  const hashedPassword = await bcrypt.hash(password, 10);
-
+  const hashedPassword = await bcrypt.hash(
+    password,
+    env.bcryptSaltRounds
+  );
   // Create User
   const user = await createUser({
     name,
@@ -44,3 +55,84 @@ export const registerUser = async (userData) => {
     createdAt: user.createdAt,
   };
 };
+
+export const forgotPassword = async (email) => {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const user = await findUserByEmail(normalizedEmail);
+
+  const GENERIC_RESET_MESSAGE =
+    "If an account with that email exists, a password reset link has been sent.";
+  if (!user) {
+    return {
+      success: true,
+      message:
+        GENERIC_RESET_MESSAGE,
+    };
+  }
+  const resetToken = generateResetToken();
+
+  const hashedResetToken = hashResetToken(resetToken);
+
+  const passwordResetExpires = new Date(
+    Date.now() + env.passwordResetExpiryMinutes * 60 * 1000
+  );
+
+  await savePasswordResetToken({
+    email: normalizedEmail,
+    passwordResetToken: hashedResetToken,
+    passwordResetExpires,
+  });
+};
+
+export const savePasswordResetToken = async ({
+  email,
+  passwordResetToken,
+  passwordResetExpires,
+}) => {
+  return await User.findOneAndUpdate(
+    { email },
+    {
+      passwordResetToken,
+      passwordResetExpires,
+    },
+    { new: true }
+  );
+};
+
+const passwordResetExpires = new Date(
+  Date.now() + env.passwordResetExpiryMinutes * 60 * 1000
+);
+
+await savePasswordResetToken({
+  email: normalizedEmail,
+  passwordResetToken: hashedResetToken,
+  passwordResetExpires,
+});
+
+const resetUrl =
+  `${env.frontendUrl}/reset-password/${resetToken}`;
+
+const html = forgotPasswordTemplate({
+  userName: user.name,
+  resetUrl,
+});
+
+try {
+  await sendEmail({
+    to: user.email,
+    subject: AUTH_EMAIL_SUBJECTS.FORGOT_PASSWORD,
+    html,
+  });
+} catch (error) {
+  await clearPasswordResetToken(normalizedEmail);
+
+  throw new Error(
+    "Unable to send password reset email. Please try again."
+  );
+}
+
+return {
+  success: true,
+  message: GENERIC_RESET_MESSAGE
+} 

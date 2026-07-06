@@ -1,19 +1,48 @@
-import { registerUser } from "../api/authApi";
+import {
+  registerApi,
+  loginApi,
+  forgotPasswordApi,
+  resetPasswordApi,
+} from "../api/auth.api";
 
-export const signup = async (userData) => {
-  try {
-    const response = await registerUser(userData);
+/**
+ * Register User
+ */
+export const register = async (userData) => {
+  const response = await registerApi(userData);
 
-    return {
-      success: true,
-      message: response.data.message,
-      data: response.data.data,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: error.response?.data?.message || "Something went wrong",
-      errors: error.response?.data?.errors || [],
-    };
-  }
+  return response.data;
+};
+
+/**
+ * Login User
+ */
+export const login = async (credentials) => {
+  const response = await loginApi(credentials);
+
+  return response.data;
+};
+
+/**
+ * Forgot Password
+ */
+export const forgotPassword = async (email) => {
+  const response = await forgotPasswordApi(email);
+
+  return response.data;
+};
+
+/**
+ * Reset Password
+ */
+export const resetPassword = async (
+  token,
+  passwordData
+) => {
+  const response = await resetPasswordApi(
+    token,
+    passwordData
+  );
+
+  return response.data;
 };
