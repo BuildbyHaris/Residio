@@ -3,11 +3,15 @@ import {
   loginApi,
   forgotPasswordApi,
   resetPasswordApi,
-<<<<<<< Updated upstream
+
 } from "../api/authApi";
-=======
-} from "../api/authApi.js";
->>>>>>> Stashed changes
+
+
+
+
+
+
+
 
 /**
  * Register User
