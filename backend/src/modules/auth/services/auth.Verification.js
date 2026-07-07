@@ -33,6 +33,24 @@ const verifyEmail = async (token) => {
     success: true,
     message: "Email verified successfully.",
   };
+    const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+  // TODO:
+  // Apni email utility se email send karo.
+  // Example:
+  //
+  // await sendVerificationEmail({
+  //   to: user.email,
+  //   name: user.name,
+  //   verificationLink,
+  // });
+
+  return {
+    success: true,
+    message: "Verification email sent successfully.",
+    // Development ke liye
+    verificationLink,
+  };
 };
 
 module.exports = {
