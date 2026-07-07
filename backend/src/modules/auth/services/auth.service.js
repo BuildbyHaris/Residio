@@ -98,8 +98,6 @@ export const forgotPassword = async (email) => {
     passwordResetToken: hashedResetToken,
     passwordResetExpires,
   });
-
-<<<<<<< HEAD
 // export const savePasswordResetToken = async ({
 //   email,
 //   passwordResetToken,
@@ -114,10 +112,9 @@ export const forgotPassword = async (email) => {
 //     { new: true }
 //   );
 // };
-=======
   // Frontend reset URL
   const resetUrl = `${env.frontendUrl}/reset-password/${resetToken}`;
->>>>>>> a47e5fb4ae131d3aa436301266b6bfb0ff91e147
+
 
   // Email HTML
   const html = forgotPasswordTemplate({

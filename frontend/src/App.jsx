@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Register from "./modules/auth/pages/Register";
+import Login from "./modules/auth/pages/login";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
 
         {/* Register Page */}
         <Route path="/register" element={<Register />} />
-
+        {/* Login Page */}
+        <Route path="/login" element={<Login />} />
         {/* 404 Page */}
         <Route
           path="*"

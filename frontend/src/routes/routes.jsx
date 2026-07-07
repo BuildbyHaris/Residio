@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Register from "../modules/auth/pages/Register";
+import Login from "../modules/auth/pages/login";
 import ForgotPassword from "../modules/auth/pages/ForgotPassword";
 import ResetPassword from "../modules/auth/pages/ResetPassword";
-
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -14,6 +14,10 @@ const AppRoutes = () => {
         <Route
           path="/register"
           element={<Register />}
+        />
+        <Route
+        path="/login"
+        element={<Login />}
         />
 
         <Route
