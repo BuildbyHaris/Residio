@@ -106,8 +106,28 @@ export const forgotPassword = async (email) => {
     passwordResetExpires,
   });
 
+
   // Frontend reset URL
   const resetUrl = `${env.frontendUrl}/reset-password/${resetToken}`;
+
+// export const savePasswordResetToken = async ({
+//   email,
+//   passwordResetToken,
+//   passwordResetExpires,
+// }) => {
+//   return await User.findOneAndUpdate(
+//     { email },
+//     {
+//       passwordResetToken,
+//       passwordResetExpires,
+//     },
+//     { new: true }
+//   );
+// };
+  // Frontend reset URL
+  const resetUrl = `${env.frontendUrl}/reset-password/${resetToken}`;
+
+
 
   // Email HTML
   const html = forgotPasswordTemplate({
