@@ -7,6 +7,9 @@ import {
  * Register User
  */
 export const register = async (req, res) => {
+  console.log("✅ Register Controller Hit");
+  console.log("Request Body:", req.body);
+
   try {
     const user = await registerUser(req.body);
 
@@ -16,7 +19,8 @@ export const register = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    // Duplicate Email
+    console.log("❌ Register Error:", error);
+
     if (error.message === "Email already exists") {
       return res.status(409).json({
         success: false,
@@ -24,7 +28,6 @@ export const register = async (req, res) => {
       });
     }
 
-    // Duplicate Phone
     if (error.message === "Phone number already exists") {
       return res.status(409).json({
         success: false,
@@ -56,4 +59,21 @@ export const forgotPasswordController = async (req, res) => {
       message: error.message,
     });
   }
+<<<<<<< Updated upstream
+=======
+};
+
+/**
+ * Reset Password
+ */
+export const resetPasswordController = async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      message: "Reset Password endpoint is under development.",
+    });
+  } catch (error) {
+    next(error);
+  }
+>>>>>>> Stashed changes
 };

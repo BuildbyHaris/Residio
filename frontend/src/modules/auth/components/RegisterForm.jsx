@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signup } from "../services/authService";
+import { register } from "../services/authService";
 import "./RegisterForm.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -8,7 +8,11 @@ const RegisterForm = () => {
     name: "",
     email: "",
     phone: "",
+<<<<<<< Updated upstream
     gender: "other",
+=======
+    gender: "",
+>>>>>>> Stashed changes
     password: "",
     confirmPassword: "",
     role: "student",
@@ -94,7 +98,7 @@ const RegisterForm = () => {
 
     setLoading(true);
 
-    const result = await signup({
+    const result = await register({
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
@@ -115,7 +119,11 @@ const RegisterForm = () => {
         name: "",
         email: "",
         phone: "",
+<<<<<<< Updated upstream
         gender: "other",
+=======
+        gender: "",
+>>>>>>> Stashed changes
         password: "",
         confirmPassword: "",
         role: "student",

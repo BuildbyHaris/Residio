@@ -7,14 +7,27 @@ import {
   savePasswordResetToken,
 } from "../repositories/auth.repository.js";
 
+<<<<<<< Updated upstream
 import { generateResetToken } from "../utils/token.js";
 import { hashResetToken } from "../utils/hashToken.js";
 import { sendEmail } from "../../../shared/services/email.service.js";
 import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
 import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
+=======
+
+// import { sendEmail } from "../../../shared/services/email.service.js";
+// import { forgotPasswordTemplate } from "../templates/forgotPassword.template.js";
+
+// import { AUTH_EMAIL_SUBJECTS } from "../constants/auth.constants.js";
+>>>>>>> Stashed changes
 
 export const registerUser = async (userData) => {
-  const { name, email, phone, password, role } = userData;
+  console.log("✅ registerUser() called");
+  console.log("User Data:", userData);
+
+  const { name, email, phone, gender, password, role } = userData;
+
+
 
   // Check Duplicate Email
   const existingEmail = await findUserByEmail(email);
@@ -41,6 +54,7 @@ export const registerUser = async (userData) => {
     name,
     email,
     phone,
+    gender,
     password: hashedPassword,
     role,
   });
@@ -51,6 +65,7 @@ export const registerUser = async (userData) => {
     name: user.name,
     email: user.email,
     phone: user.phone,
+    gender: user.gender,
     role: user.role,
     createdAt: user.createdAt,
   };

@@ -1,22 +1,28 @@
 export const validate = (schema) => {
-    return (req, res, next) => {
+  return (req, res, next) => {
+    console.log("Incoming Body:", req.body);
 
-        const { error } = schema.validate(req.body, {
-            abortEarly: false,
-            allowUnknown: false,
-        });
+    const { value, error } = schema.validate(req.body, {
+      abortEarly: false,
+      allowUnknown: false,
+    });
 
-        if (error) {
-            return res.status(400).json({
-                success: false,
-                message: "Validation Error",
-                errors: error.details.map(err => ({
-                    field: err.path.join("."),
-                    message: err.message,
-                })),
-            });
-        }
+    console.log("Joi Error:", error);
+    console.log("Joi Details:", error?.details);
 
-        next();
-    };
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error",
+        errors: error.details.map((err) => ({
+          field: err.path.join("."),
+          message: err.message,
+        })),
+      });
+    }
+
+    req.body = value;
+    console.log("✅ Validation Passed");
+    next();
+  };
 };

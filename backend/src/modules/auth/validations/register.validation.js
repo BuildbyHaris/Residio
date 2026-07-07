@@ -1,3 +1,5 @@
+console.log("✅ NEW register.validation.js is loaded");
+
 import Joi from "joi";
 
 export const registerValidationSchema = Joi.object({
@@ -38,6 +40,7 @@ export const registerValidationSchema = Joi.object({
       "any.required": "Phone number is required",
       "string.pattern.base": "Phone number must be in the format +923234113114",
     }),
+<<<<<<< Updated upstream
     // Gender
  gender: Joi.string()
   .required()
@@ -47,6 +50,18 @@ export const registerValidationSchema = Joi.object({
     "any.required": "Gender is required",
     "any.only": "Gender must be male, female or other",
   }),
+=======
+  // Gender
+  gender: Joi.string()
+    .required()
+    .valid("male", "female", "other")
+    .messages({
+      "string.empty": "Gender is required",
+      "any.required": "Gender is required",
+      "any.only": "Gender must be male, female or other",
+    }),
+
+>>>>>>> Stashed changes
   // Password
   password: Joi.string()
     .required()
@@ -63,7 +78,7 @@ export const registerValidationSchema = Joi.object({
     }),
 
   // Confirm Password
-  confirmpassword: Joi.string()
+  confirmPassword: Joi.string()
     .required()
     .valid(Joi.ref("password"))
     .messages({
