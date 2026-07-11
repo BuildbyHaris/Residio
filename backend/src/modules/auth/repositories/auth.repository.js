@@ -26,18 +26,19 @@ export const createUser = async (userData) => {
 };
 
 /**
- * Save password reset token
+ * Save Email OTP
  */
-export const savePasswordResetToken = async ({
+export const saveEmailOTP = async ({
   email,
-  passwordResetToken,
-  passwordResetExpires,
+  emailOtp,
+  emailOtpExpires,
 }) => {
   return await User.findOneAndUpdate(
     { email },
     {
-      passwordResetToken,
-      passwordResetExpires,
+      emailOtp,
+      emailOtpExpires,
+      lastOtpSentAt: new Date(),
     },
     {
       new: true,
@@ -46,19 +47,87 @@ export const savePasswordResetToken = async ({
 };
 
 /**
- * Find user by valid password reset token
+ * Find user by Email OTP
  */
-export const findUserByPasswordResetToken = async (passwordResetToken) => {
+export const findUserByEmailOTP = async (
+  email,
+  emailOtp
+) => {
   return await User.findOne({
-    passwordResetToken,
-    passwordResetExpires: {
+    email,
+    emailOtp,
+    emailOtpExpires: {
       $gt: Date.now(),
     },
-  });
+  }).select("+emailOtp +emailOtpExpires");
 };
 
 /**
- * Update user password and clear reset token
+ * Verify user email
+ */
+export const verifyUserEmail = async (
+  userId
+) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    {
+      isVerified: true,
+      emailOtp: null,
+      emailOtpExpires: null,
+    },
+    {
+      new: true,
+    }
+  );
+};
+
+/**
+ * Clear Email OTP
+ */
+export const clearEmailOTP = async (
+  email
+) => {
+  return await User.findOneAndUpdate(
+    { email },
+    {
+      emailOtp: null,
+      emailOtpExpires: null,
+    },
+    {
+      new: true,
+    }
+  );
+};
+
+/**
+ * Delete User
+ */
+export const deleteUserById = async (
+  userId
+) => {
+  return await User.findByIdAndDelete(userId);
+};
+
+/**
+ * Find User For Login
+ */
+export const findUserForLogin = async (email) => {
+
+    return await User.findOne({
+        email,
+    }).select("+password");
+
+};
+
+/**
+ * Find user by ID
+ */
+export const findUserById = async (userId) => {
+  return await User.findById(userId);
+};
+
+/**
+ * Update user password
  */
 export const updateUserPassword = async ({
   userId,
@@ -68,24 +137,6 @@ export const updateUserPassword = async ({
     userId,
     {
       password,
-      passwordResetToken: null,
-      passwordResetExpires: null,
-    },
-    {
-      new: true,
-    }
-  );
-};
-
-/**
- * Clear password reset token
- */
-export const clearPasswordResetToken = async (email) => {
-  return await User.findOneAndUpdate(
-    { email },
-    {
-      passwordResetToken: null,
-      passwordResetExpires: null,
     },
     {
       new: true,

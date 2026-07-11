@@ -1,37 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
-import Register from "./modules/auth/pages/Register";
-import Login from "./modules/auth/pages/Login";
+import AppRoutes from "./routes/routes";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Redirect Home to Register */}
-        <Route path="/" element={<Navigate to="/register" replace />} />
-
-        {/* Register Page */}
-        <Route path="/register" element={<Register />} />
-        {/* Login Page */}
-        <Route path="/login" element={<Login />} />
-        {/* 404 Page */}
-        <Route
-          path="*"
-          element={
-            <h2
-              style={{
-                textAlign: "center",
-                marginTop: "50px",
-                color: "red",
-              }}
-            >
-              404 - Page Not Found
-            </h2>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <AppRoutes />;
 }
 
 export default App;

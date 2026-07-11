@@ -39,28 +39,42 @@ const userSchema = new mongoose.Schema(
       minlength: [8, "Password must be at least 8 characters"],
       select: false,
     },
-    passwordResetToken: {
-      type: String,
-      default: null,
-    },
-
-    passwordResetExpires: {
-      type: Date,
-      default: null,
-    },
 
     role: {
       type: String,
-      enum: ["student", "owner"],
-      default: "student",
+      enum: ["buyer", "owner"],
+      default: "buyer",
       required: true,
     },
 
+    // ==========================
+    // Email Verification
+    // ==========================
 
     isVerified: {
       type: Boolean,
       default: false,
     },
+
+    emailOtp: {
+      type: String,
+      default: null,
+      select: false,
+    },
+
+    emailOtpExpires: {
+      type: Date,
+      default: null,
+    },
+
+    lastOtpSentAt: {
+      type: Date,
+      default: null,
+    },
+
+    // Password Reset
+    // ==========================
+    // (We now use stateless JWTs stored in cookies instead of DB fields)
   },
   {
     timestamps: true,

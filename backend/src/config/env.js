@@ -13,7 +13,7 @@ const requiredEnvVariables = [
     "JWT_SECRET",
     "JWT_EXPIRES_IN",
     "BCRYPT_SALT_ROUNDS",
-    "PASSWORD_RESET_EXPIRES_MINUTES",
+    "RESET_SESSION_EXPIRES_IN",
     "SMTP_HOST",
     "SMTP_PORT",
     "SMTP_SECURE",
@@ -55,9 +55,8 @@ export const env = {
 
     emailFrom: process.env.EMAIL_FROM,
 
-    passwordResetExpiryMinutes: Number(
-        process.env.PASSWORD_RESET_EXPIRES_MINUTES
-    ),
+    resetSessionExpiresIn:
+        process.env.RESET_SESSION_EXPIRES_IN,
 
     frontendUrl: process.env.FRONTEND_URL,
 };

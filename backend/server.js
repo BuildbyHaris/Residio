@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import { env } from "./src/config/env.js";
 import authRoutes from "./src/modules/auth/routes/auth.routes.js";
@@ -8,9 +9,15 @@ import authRoutes from "./src/modules/auth/routes/auth.routes.js";
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: env.frontendUrl,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Health Check
 app.get("/", (req, res) => {
