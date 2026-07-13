@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import { env } from "./src/config/env.js";
 import authRoutes from "./src/modules/auth/routes/auth.routes.js";
+import profileRoutes from "./src/modules/profile/routes/profile.routes.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/profile", profileRoutes);
 
 // MongoDB Connection
 mongoose
