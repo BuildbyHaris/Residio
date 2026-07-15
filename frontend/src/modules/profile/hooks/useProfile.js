@@ -24,9 +24,7 @@ export function useProfile() {
 
       setError("");
     } catch (err) {
-  console.log("Profile Error:", err);
-  console.log("Response:", err.response);
-  console.log("Data:", err.response?.data);
+  
 
   setError(
     err.response?.data?.message ||
@@ -54,6 +52,7 @@ export function useProfile() {
     try {
       const updatedProfile =
         await profileService.saveProfile(formData);
+
 
       setUser(updatedProfile);
 

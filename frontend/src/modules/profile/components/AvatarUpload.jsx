@@ -1,13 +1,13 @@
 import { Camera } from "lucide-react";
 import { getInitials } from "../utils/imageHelpers";
 
-function AvatarUpload({ avatarUrl, name, onChangePhoto }) {
+function AvatarUpload({ imageUrl, name, onChangePhoto }) {
   return (
     <div className="relative inline-block flex-shrink-0">
       <div className="w-32 h-32 rounded-full border-4 border-[#F5732C] overflow-hidden bg-gray-100">
-        {avatarUrl ? (
+        {imageUrl ? (
           <img
-            src={avatarUrl}
+            src={imageUrl}
             alt={name}
             className="w-full h-full object-cover"
           />

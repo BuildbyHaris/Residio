@@ -4,6 +4,7 @@ import AccountBadge from "./AccountBadge";
 import VerifiedChip from "./VerifiedChip";
 
 function ProfileHeroCard({ user, onEditProfile, onSwitchToSeller }) {
+ 
   return (
     <div className="relative bg-[#FDEDE3] rounded-2xl p-8 overflow-hidden">
       {/* Decorative squiggle */}
@@ -20,7 +21,7 @@ function ProfileHeroCard({ user, onEditProfile, onSwitchToSeller }) {
       <div className="relative flex flex-col lg:flex-row gap-8">
         {/* Left: Avatar */}
         <AvatarUpload
-          avatarUrl={user.avatarUrl}
+          imageUrl={user.profileImage?.url}
           name={user.name}
           onChangePhoto={() => console.log("Change photo")}
         />
@@ -29,7 +30,7 @@ function ProfileHeroCard({ user, onEditProfile, onSwitchToSeller }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
-            <AccountBadge type={user.accountType} />
+            <AccountBadge type={user.ownerStatus} />
           </div>
 
           <div className="mt-4 space-y-2.5">
@@ -44,7 +45,7 @@ function ProfileHeroCard({ user, onEditProfile, onSwitchToSeller }) {
             <div className="flex items-center gap-2.5 text-gray-600 text-sm">
               <Calendar className="w-4 h-4 text-gray-400" />
               <span>Member since {user.memberSince}</span>
-              {user.verified && (
+              {user.isVerified && (
                 <span className="ml-2">
                   <VerifiedChip />
                 </span>
@@ -63,7 +64,7 @@ function ProfileHeroCard({ user, onEditProfile, onSwitchToSeller }) {
             Edit Profile
           </button>
 
-          {user.accountType === "buyer" && (
+          {user.ownerStatus === "buyer" && (
             <div className="flex flex-col items-end gap-2 mt-2">
               <button
                 onClick={onSwitchToSeller}

@@ -26,6 +26,7 @@ export const updateProfileController = async (
     res,
     next
 ) => {
+    
     try {
 
         const updatedProfile = await updateProfile(

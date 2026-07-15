@@ -97,11 +97,17 @@ function Navbar({ user }) {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-2.5 cursor-pointer hover:opacity-90 transition-opacity"
           >
-            <img
-              src={user.avatarUrl}
-              alt={user.name}
-              className="w-9 h-9 rounded-full ring-2 ring-[#F5732C]/40 object-cover"
-            />
+            {user.profileImage?.url ? (
+              <img
+                src={user.profileImage.url}
+                alt={user.name}
+                className="w-9 h-9 rounded-full ring-2 ring-[#F5732C]/40 object-cover"
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full ring-2 ring-[#F5732C]/40 bg-[#FDEDE3] flex items-center justify-center font-semibold text-[#F5732C]">
+                {user.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
             <span className="text-sm font-medium text-gray-800 hidden md:block">
               {user.name}
             </span>

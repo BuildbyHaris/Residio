@@ -175,25 +175,27 @@ function EditProfileModal({
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("✅ Submit clicked");
-     alert("Submit clicked");
     if (saving) return;
+
+    const dataToValidate = {
+      name: formData.name,
+      phone: formData.phone,
+      bio: formData.bio,
+      gender: formData.gender,
+      dateOfBirth: formData.dateOfBirth,
+    };
 
     const {
       isValid,
       errors: validationErrors,
-    } = validateProfile(formData);
+    } = validateProfile(dataToValidate);
 
-      console.log("2", isValid, validationErrors);
 
     if (!isValid) {
-          console.log("3 Validation failed");
       setErrors(validationErrors);
       return;
     }
-
     try {
-      console.log("🚀 Calling onSave...");
 
       setSaving(true);
 
@@ -236,7 +238,6 @@ function EditProfileModal({
       console.log("Payload about to send:", payload);
 
       await onSave(payload);
-      console.log("✅ onSave finished");
       setSelectedImage(null);
       setErrors({});
       setApiError("");
