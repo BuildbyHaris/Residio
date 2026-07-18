@@ -143,3 +143,33 @@ export const updateUserPassword = async ({
     }
   );
 };
+
+/**
+ * Update user by ID
+ */
+export const updateUserById = async (
+  userId,
+  updateData,
+  session = null
+) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    updateData,
+    {
+      new: true,
+      runValidators: true,
+      session,
+    }
+  );
+};
+
+/**
+ * Find user by ID with populated references
+ */
+export const findUserByIdWithProfile = async (
+  userId
+) => {
+  return await User.findById(userId)
+    .populate("ownerVerification")
+    .populate("ownerProfile");
+};

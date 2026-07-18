@@ -114,6 +114,28 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    ownerVerification: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OwnerVerification",
+      default: null,
+    },
+
+    ownerProfile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OwnerProfile",
+      default: null,
+    },
+
+    ownerApprovedAt: {
+      type: Date,
+      default: null,
+    },
+
+    ownerApprovedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,

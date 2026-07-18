@@ -6,6 +6,9 @@ import cookieParser from "cookie-parser";
 import { env } from "./src/config/env.js";
 import authRoutes from "./src/modules/auth/routes/auth.routes.js";
 import profileRoutes from "./src/modules/profile/routes/profile.routes.js";
+import errorMiddleware from "./src/shared/middlewares/error.middleware.js";
+import ownerVerificationRoutes 
+from "./src/modules/ownerVerification/routes/ownerVerification.routes.js";
 
 const app = express();
 
@@ -31,6 +34,11 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/profile", profileRoutes);
+app.use(
+    "/api/v1/owner-verification",
+    ownerVerificationRoutes
+);
+app.use(errorMiddleware);
 
 // MongoDB Connection
 mongoose

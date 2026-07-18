@@ -3,13 +3,25 @@ import multer from "multer";
 // Store files in memory (RAM)
 const storage = multer.memoryStorage();
 
-// Allow only image files
+const allowedTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/pdf",
+];
+
+// Allow only supported file types
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image files are allowed."), false);
+  if (allowedTypes.includes(file.mimetype)) {
+    return cb(null, true);
   }
+
+  cb(
+    new Error(
+      "Only JPG, PNG, WEBP and PDF files are allowed."
+    ),
+    false
+  );
 };
 
 // Reusable upload middleware

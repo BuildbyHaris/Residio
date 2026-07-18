@@ -1,18 +1,17 @@
 import { Readable } from "stream";
 import cloudinary from "../../config/cloudinary.js";
 
-/**
- * Upload image to Cloudinary
- */
-export const uploadImage = (
+
+export const uploadFile = (
   buffer,
-  folder = "residio"
+  folder = "residio",
+  resourceType = "image"
 ) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: "image",
+        resource_type: resourceType,
       },
       (error, result) => {
         if (error) {
@@ -27,17 +26,33 @@ export const uploadImage = (
   });
 };
 
-/**
- * Delete image from Cloudinary
- */
+
+export const uploadImage = (
+  buffer,
+  folder = "residio"
+) => {
+  return uploadFile(
+    buffer,
+    folder,
+    "image"
+  );
+};
+
+
+export const deleteFile = async (
+  publicId,
+  resourceType = "image"
+) => {
+  if (!publicId) return;
+
+  return await cloudinary.uploader.destroy(publicId, {
+    resource_type: resourceType,
+  });
+};
+
+
 export const deleteImage = async (
   publicId
 ) => {
-
-  if (!publicId) return;
-
-  return await cloudinary.uploader.destroy(
-    publicId
-  );
-
+  return deleteFile(publicId, "image");
 };
