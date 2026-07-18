@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 
 const result = dotenv.config();
-
 if (result.error) {
     throw result.error;
 }
@@ -21,6 +20,9 @@ const requiredEnvVariables = [
     "SMTP_PASS",
     "EMAIL_FROM",
     "FRONTEND_URL",
+    "CLOUDINARY_CLOUD_NAME",
+    "CLOUDINARY_API_KEY",
+    "CLOUDINARY_API_SECRET",
 ];
 
 // Validate required environment variables
@@ -32,32 +34,18 @@ for (const variable of requiredEnvVariables) {
 
 export const env = {
     port: Number(process.env.PORT),
-
     nodeEnv: process.env.NODE_ENV,
-
     mongoUri: process.env.MONGO_URI,
-
     jwtSecret: process.env.JWT_SECRET,
-
     jwtExpiresIn: process.env.JWT_EXPIRES_IN,
-
     bcryptSaltRounds: Number(process.env.BCRYPT_SALT_ROUNDS),
-
     smtpHost: process.env.SMTP_HOST,
-
     smtpPort: Number(process.env.SMTP_PORT),
-
     smtpSecure: process.env.SMTP_SECURE === "true",
-
     smtpUser: process.env.SMTP_USER,
-
     smtpPass: process.env.SMTP_PASS,
-
     emailFrom: process.env.EMAIL_FROM,
-
-    resetSessionExpiresIn:
-        process.env.RESET_SESSION_EXPIRES_IN,
-
+    resetSessionExpiresIn: process.env.RESET_SESSION_EXPIRES_IN,
     frontendUrl: process.env.FRONTEND_URL,
     
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,

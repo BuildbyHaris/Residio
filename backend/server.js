@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
 import { env } from "./src/config/env.js";
 import authRoutes from "./src/modules/auth/routes/auth.routes.js";
 import profileRoutes from "./src/modules/profile/routes/profile.routes.js";

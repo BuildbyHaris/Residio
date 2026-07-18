@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import LandingPage from "../modules/landing/pages/Landing";
 import Register from "../modules/auth/pages/Register";
 import VerifyOtp from "../modules/auth/pages/VerifyOtp";
@@ -29,6 +28,11 @@ const AppRoutes = () => {
             path="/profile"
             element={<ProfilePage />}
           />
+        </Route>
+
+        {/* Owner Dashboard (protected, owner-only) */}
+        <Route element={<ProtectedRoute allowedRole="owner" />}>
+          <Route path="/owner-dashboard" element={<OwnerDashboard />} />
         </Route>
 
         {/* 404 */}

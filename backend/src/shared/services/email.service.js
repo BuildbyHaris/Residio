@@ -9,6 +9,9 @@ const transporter = nodemailer.createTransport({
     user: env.smtpUser,
     pass: env.smtpPass,
   },
+  tls: {
+    rejectUnauthorized: env.nodeEnv === "production",
+  },
 });
 
 export const sendEmail = async ({
@@ -25,4 +28,3 @@ export const sendEmail = async ({
     html,
   });
 };
-
