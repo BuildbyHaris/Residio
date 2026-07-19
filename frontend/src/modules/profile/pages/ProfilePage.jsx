@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { useProfile } from "../hooks/useProfile";
 
 import Navbar from "../components/Navbar";
@@ -17,6 +17,7 @@ import {
 
 
 function ProfilePage() {
+    const navigate = useNavigate();
   // Local UI State
   const [activeItem, setActiveItem] = useState("profile");
 
@@ -61,9 +62,9 @@ function ProfilePage() {
 
   // Stats according to account type
   const stats =
-  user.ownerStatus === "owner"
-    ? OWNER_STATS
-    : BUYER_STATS;
+    user.ownerStatus === "owner"
+      ? OWNER_STATS
+      : BUYER_STATS;
 
   return (
     <div className="min-h-screen bg-[#FEF7F2]">
@@ -109,10 +110,8 @@ function ProfilePage() {
         open={isSwitchModalOpen}
         onClose={closeSwitchModal}
         onConfirmSwitch={() => {
-          console.log(
-            "Switch Account feature coming soon..."
-          );
           closeSwitchModal();
+          navigate("/owner-verification");
         }}
       />
     </div>

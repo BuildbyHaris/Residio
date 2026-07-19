@@ -7,6 +7,9 @@ import ForgotPassword from "../modules/auth/pages/ForgotPassword";
 import VerifyResetOtp from "../modules/auth/pages/VerifyResetOtp";
 import ResetPassword from "../modules/auth/pages/ResetPassword";
 import ProfilePage from "../modules/profile/pages/ProfilePage";
+import OwnerDashboard from "../modules/ownerDashboard/pages/ownerDashboard";
+import OwnerVerificationPage from '../modules/ownerVerification/pages/OwnerVerificationPage';
+
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
@@ -27,6 +30,13 @@ const AppRoutes = () => {
           <Route
             path="/profile"
             element={<ProfilePage />}
+          />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/owner-verification"
+            element={<OwnerVerificationPage />}
           />
         </Route>
 
