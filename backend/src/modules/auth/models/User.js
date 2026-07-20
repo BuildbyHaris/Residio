@@ -71,10 +71,71 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    profileImage: {
+      url: {
+        type: String,
+        default: "",
+      },
+      publicId: {
+        type: String,
+        default: "",
+      },
+    },
 
-    // Password Reset
-    // ==========================
-    // (We now use stateless JWTs stored in cookies instead of DB fields)
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 300,
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female", "other", ""],
+      default: "",
+    },
+
+    dateOfBirth: {
+      type: Date,
+      default: null,
+    },
+
+    ownerStatus: {
+      type: String,
+      enum: [
+        "buyer",
+        "pending_owner",
+        "owner",
+        "rejected_owner",
+      ],
+      default: "buyer",
+    },
+
+    rejectionReason: {
+      type: String,
+      default: "",
+    },
+    ownerVerification: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OwnerVerification",
+      default: null,
+    },
+
+    ownerProfile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OwnerProfile",
+      default: null,
+    },
+
+    ownerApprovedAt: {
+      type: Date,
+      default: null,
+    },
+
+    ownerApprovedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,

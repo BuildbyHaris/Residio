@@ -1,12 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
-import LandingPage  from "../modules/landing/pages/Landing";
+import LandingPage from "../modules/landing/pages/Landing";
 import Register from "../modules/auth/pages/Register";
 import VerifyOtp from "../modules/auth/pages/VerifyOtp";
 import Login from "../modules/auth/pages/Login";
 import ForgotPassword from "../modules/auth/pages/ForgotPassword";
 import VerifyResetOtp from "../modules/auth/pages/VerifyResetOtp";
 import ResetPassword from "../modules/auth/pages/ResetPassword";
+import ProfilePage from "../modules/profile/pages/ProfilePage";
+import OwnerDashboard from "../modules/ownerDashboard/pages/ownerDashboard";
+import OwnerVerificationPage from '../modules/ownerVerification/pages/OwnerVerificationPage';
+
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -22,6 +26,24 @@ const AppRoutes = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/profile"
+            element={<ProfilePage />}
+          />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/owner-verification"
+            element={<OwnerVerificationPage />}
+          />
+        </Route>
+
+        {/* Owner Dashboard (protected, owner-only) */}
+        <Route element={<ProtectedRoute allowedRole="owner" />}>
+          <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+        </Route>
 
         {/* 404 */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -54,7 +54,8 @@ export const AuthProvider = ({ children }) => {
     }),
     [user, loading]
   );
-
+console.log("AuthContext user:", user);
+console.log("isAuthenticated:", !!user);
   return (
     <AuthContext.Provider value={value}>
       {children}
