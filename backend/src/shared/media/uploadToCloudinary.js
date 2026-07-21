@@ -1,12 +1,6 @@
 import streamifier from "streamifier";
-import cloudinary from "../../../config/cloudinary.js";
+import cloudinary from "../../config/cloudinary.js";
 
-/**
- * Uploads a file buffer to Cloudinary and returns the secure URL
- * @param {Buffer} fileBuffer - the image buffer from multer
- * @param {string} folder - Cloudinary folder to organize uploads
- * @returns {Promise<string>} secure_url of uploaded image
- */
 export const uploadToCloudinary = (fileBuffer, folder = "risido/hostels") => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
@@ -16,7 +10,11 @@ export const uploadToCloudinary = (fileBuffer, folder = "risido/hostels") => {
         resolve(result.secure_url);
       }
     );
-
     streamifier.createReadStream(fileBuffer).pipe(uploadStream);
   });
+};
+// uploadToCloudinary.js ke end mein yeh add karein:
+export const deleteFromCloudinary = async (publicId) => {
+  console.log("Mock delete triggered for:", publicId);
+  return { result: "ok" };
 };

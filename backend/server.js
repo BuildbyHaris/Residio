@@ -5,9 +5,12 @@ import cookieParser from "cookie-parser";
 import { env } from "./src/config/env.js";
 import authRoutes from "./src/modules/auth/routes/auth.routes.js";
 import profileRoutes from "./src/modules/profile/routes/profile.routes.js";
+import hostelRoutes from "./src/modules/ownerDashboard/routes/hostel.routes.js";
 import errorMiddleware from "./src/shared/middlewares/error.middleware.js";
-import ownerVerificationRoutes 
-from "./src/modules/ownerVerification/routes/ownerVerification.routes.js";
+import ownerVerificationRoutes from "./src/modules/ownerVerification/routes/ownerVerification.routes.js";
+
+// Note: Apne hostel module folder ke mutabiq path check kar lein
+
 
 const app = express();
 
@@ -37,6 +40,7 @@ app.use(
     "/api/v1/owner-verification",
     ownerVerificationRoutes
 );
+app.use("/api/v1/hostels", hostelRoutes);
 app.use(errorMiddleware);
 
 // MongoDB Connection

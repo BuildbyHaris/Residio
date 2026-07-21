@@ -12,7 +12,7 @@ export const signupSchema = Joi.object({
   "string.min": "Password must be at least 8 characters",
   "string.max": "Password cannot exceed 15 characters",
   "string.pattern.base":
-    "Password must contain uppercase, lowercase, number and one special character.",
+    "Name must contain uppercase, lowercase, number and special character not Allow .",
     }),
   email: Joi.string()
     .email({
