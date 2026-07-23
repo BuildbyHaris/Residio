@@ -186,6 +186,7 @@ const RegisterForm = () => {
               value={formData.phone}
               onChange={handleChange}
               className={inputBase}
+              maxLength={11}
             />
           </div>
           {errors.phone && (
@@ -297,14 +298,14 @@ const RegisterForm = () => {
         </p>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 pt-2">
+        {/* <div className="flex items-center gap-3 pt-2">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-sm text-gray-400">or</span>
           <div className="flex-1 h-px bg-gray-200" />
-        </div>
+        </div> */}
 
         {/* Social buttons at the bottom */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => handleGoogleLogin()}
@@ -321,7 +322,7 @@ const RegisterForm = () => {
             <FaFacebook size={18} className="text-[#1877F2]" />
             Continue with Facebook
           </button>
-        </div>
+        </div> */}
 
         {/* Trust Badges */}
         <div className="border-t border-gray-100 pt-5 mt-4 grid grid-cols-3 gap-3 text-center">

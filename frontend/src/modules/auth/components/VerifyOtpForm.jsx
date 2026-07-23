@@ -25,9 +25,9 @@ const VerifyOtpForm = () => {
 
   const email =
     location.state?.email ||
-    sessionStorage.getItem(EMAIL_KEY); 
+    sessionStorage.getItem(EMAIL_KEY);
 
-    const isForgotPassword = location.state?.isForgotPassword;
+  const isForgotPassword = location.state?.isForgotPassword;
 
   // ─── Resolve otpExpires ───────────────────────────────────────────────────
   // Priority: location.state (fresh navigation) → sessionStorage (after refresh)
@@ -155,8 +155,18 @@ const VerifyOtpForm = () => {
           navigate("/");
         }
       }, 1500);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Verification failed");
+    } catch(err) {
+      const message = err.response?.data?.message || "Verification failed";
+      toast.error(message);
+
+      if (
+        message.toLowerCase().includes("invalid") ||
+        message.toLowerCase().includes("incorrect") ||
+        message.toLowerCase().includes("otp")
+      ) {
+        setOtp(["", "", "", "", "", ""]);
+        inputs.current[0]?.focus();
+      }
     } finally {
       setLoading(false);
     }

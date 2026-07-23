@@ -188,7 +188,8 @@ const StepOne = ({ formData, updateField, errors }) => {
           error={errors.phone}
           icon={HiOutlinePhone}
           type="tel"
-          placeholder="+92 300 1234567"
+          placeholder="0300 1234567"
+          maxLength={11}
         />
 
         <FloatingInput

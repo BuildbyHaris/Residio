@@ -73,7 +73,7 @@ export const validateStepOne = (data) => {
 
   if (!data.phone) {
     errors.phone = 'Phone number is required';
-  } else if (!/^\+?\d{10,15}$/.test(data.phone.replace(/[\s-]/g, ''))) {
+  } else if (!/^\+?\d{10,11}$/.test(data.phone.replace(/[\s-]/g, ''))) {
     errors.phone = 'Enter a valid phone number';
   }
 

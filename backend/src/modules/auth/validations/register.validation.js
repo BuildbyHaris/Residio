@@ -33,6 +33,8 @@ export const registerValidationSchema = Joi.object({
     .trim()
     .required()
     .pattern(/^03\d{9}$/)
+        .min(8)
+    .max(11)
     .messages({
       "string.empty": "Phone number is required",
       "any.required": "Phone number is required",
