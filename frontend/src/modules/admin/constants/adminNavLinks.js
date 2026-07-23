@@ -1,0 +1,95 @@
+import {
+  HiOutlineHome,
+  HiOutlineShieldCheck,
+  HiOutlineCheckCircle,
+  HiOutlineUsers,
+  HiOutlineOfficeBuilding,
+  HiOutlineCalendar,
+  HiOutlineChartBar,
+  HiOutlineBell,
+  HiOutlineCog,
+  HiOutlineLogout,
+} from 'react-icons/hi';
+
+export const adminNavLinks = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    path: '/admin/dashboard',
+    icon: HiOutlineHome,
+    active: true,
+  },
+  {
+    id: 'owner-verification',
+    label: 'Owner Verification',
+    path: '/admin/owner-verifications',
+    icon: HiOutlineShieldCheck,
+    active: true,
+  },
+  {
+    id: 'property-approval',
+    label: 'Property Approval',
+    path: '/admin/property-approvals',
+    icon: HiOutlineCheckCircle,
+    active: false,
+    comingSoon: true,
+  },
+  {
+    id: 'users',
+    label: 'Users',
+    path: '/admin/users',
+    icon: HiOutlineUsers,
+    active: false,
+    comingSoon: true,
+  },
+  {
+    id: 'properties',
+    label: 'Properties',
+    path: '/admin/properties',
+    icon: HiOutlineOfficeBuilding,
+    active: false,
+    comingSoon: true,
+  },
+  {
+    id: 'bookings',
+    label: 'Bookings',
+    path: '/admin/bookings',
+    icon: HiOutlineCalendar,
+    active: false,
+    comingSoon: true,
+  },
+  {
+    id: 'reports',
+    label: 'Reports',
+    path: '/admin/reports',
+    icon: HiOutlineChartBar,
+    active: false,
+    comingSoon: true,
+  },
+  {
+    id: 'notifications',
+    label: 'Notifications',
+    path: '/admin/notifications',
+    icon: HiOutlineBell,
+    active: false,
+    comingSoon: true,
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    path: '/admin/settings',
+    icon: HiOutlineCog,
+    active: false,
+    comingSoon: true,
+  },
+];
+
+export const adminBottomLinks = [
+  {
+    id: 'logout',
+    label: 'Logout',
+    path: null,
+    icon: HiOutlineLogout,
+    isLogout: true,
+  },
+];
