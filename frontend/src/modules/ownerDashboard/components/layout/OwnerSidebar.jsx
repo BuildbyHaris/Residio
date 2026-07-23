@@ -17,7 +17,7 @@ import {
 const navItems = [
   { label: "Dashboard Overview", icon: Home, path: "/owner-dashboard" },
   { label: "My Properties", icon: Building2, path: "/owner-dashboard" },
-  { label: "Add New Property", icon: PlusCircle, path: "/owner-dashboard" },
+  { label: "Add New Property", icon: PlusCircle, path: "/owner-dashboard" }, // Set correct path here
   { label: "Bookings & Requests", icon: CalendarCheck, path: "#" },
   { label: "Messages / Enquiries", icon: MessageSquare, path: "#" },
   { label: "Reviews & Ratings", icon: Star, path: "#" },
@@ -26,7 +26,8 @@ const navItems = [
   { label: "Security & Password", icon: Lock, path: "#" },
 ];
 
-const OwnerSidebar = () => {
+
+const OwnerSidebar = ({ onAddProperty }) => {
   const { logout } = useAuth();
 
   return (
@@ -35,22 +36,30 @@ const OwnerSidebar = () => {
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
-            <NavLink
-              key={item.label}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-orange-50 text-orange-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`
-              }
+          <NavLink
+          key={item.label}
+          to={item.path}
+          onClick={
+            item.label === "Add New Property"
+            ? (e) => {
+              e.preventDefault();
+              onAddProperty();
+            }
+            : undefined
+          }
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              isActive
+              ? "bg-orange-50 text-orange-600"
+              : "text-gray-600 hover:bg-gray-50"
+            }`
+            }
             >
               <Icon size={18} />
               {item.label}
-            </NavLink>
-          );
-        })}
+              </NavLink>
+              );
+              })}
       </nav>
 
       <div className="border-t border-gray-100 pt-3 space-y-1">
