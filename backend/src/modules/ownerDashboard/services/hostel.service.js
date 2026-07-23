@@ -1,6 +1,5 @@
 import { uploadToCloudinary, deleteFromCloudinary } from "../../../shared/media/uploadToCloudinary.js";
 
-
 import {
   createHostelInDB,
   findHostelsByOwner,
@@ -45,23 +44,23 @@ export const createHostelService = async (ownerId, body, files) => {
     throw err;
   }
 
-  // Hostel-level images
-  let hostelImageUrls = [];
+  // Hostel-level images — ab {url, publicId} objects
+  let hostelImages = [];
   if (files?.images?.length) {
-    hostelImageUrls = await Promise.all(
+    hostelImages = await Promise.all(
       files.images.map((file) => uploadToCloudinary(file.buffer, "risido/hostels"))
     );
   }
 
   // Room-type images (index-matched)
   const roomImageFiles = files?.roomImages || [];
-  const roomImageUrls = await Promise.all(
+  const roomImages = await Promise.all(
     roomImageFiles.map((file) => uploadToCloudinary(file.buffer, "risido/rooms"))
   );
 
   const roomTypesWithImages = roomTypes.map((rt, index) => ({
     ...rt,
-    image: roomImageUrls[index] || null,
+    image: roomImages[index] || null,
   }));
 
   return createHostelInDB({
@@ -73,7 +72,7 @@ export const createHostelService = async (ownerId, body, files) => {
     genderPreference,
     roomTypes: roomTypesWithImages,
     amenities: body.amenities ? parseJSONField(body.amenities, "amenities") : [],
-    images: hostelImageUrls,
+    images: hostelImages,
     contactNumber,
     totalBeds,
   });
@@ -117,22 +116,22 @@ export const updateHostelService = async (hostelId, ownerId, body, files) => {
   }
 
   // Naye hostel images (append to existing)
-  let hostelImageUrls = hostel.images;
+  let hostelImages = hostel.images;
   if (files?.images?.length) {
-    const newUrls = await Promise.all(
+    const newImages = await Promise.all(
       files.images.map((file) => uploadToCloudinary(file.buffer, "risido/hostels"))
     );
-    hostelImageUrls = [...hostel.images, ...newUrls];
+    hostelImages = [...hostel.images, ...newImages];
   }
 
   // Room-type images
   if (roomTypes && files?.roomImages?.length) {
-    const roomImageUrls = await Promise.all(
+    const roomImages = await Promise.all(
       files.roomImages.map((file) => uploadToCloudinary(file.buffer, "risido/rooms"))
     );
     roomTypes = roomTypes.map((rt, index) => ({
       ...rt,
-      image: roomImageUrls[index] || rt.image || null,
+      image: roomImages[index] || rt.image || null,
     }));
   }
 
@@ -146,7 +145,7 @@ export const updateHostelService = async (hostelId, ownerId, body, files) => {
   if (status) hostel.status = status;
   if (roomTypes) hostel.roomTypes = roomTypes;
   if (body.amenities) hostel.amenities = parseJSONField(body.amenities, "amenities");
-  hostel.images = hostelImageUrls;
+  hostel.images = hostelImages;
 
   return saveHostel(hostel);
 };
@@ -167,14 +166,14 @@ export const deleteHostelService = async (hostelId, ownerId) => {
     throw err;
   }
 
-  // Cloudinary se images bhi clean karo (orphan images avoid karne ke liye)
-  const allImageUrls = [
-    ...(hostel.images || []),
-    ...(hostel.roomTypes || []).map((rt) => rt.image).filter(Boolean),
+  // Cloudinary se images bhi clean karo (publicId se, orphan images avoid karne ke liye)
+  const allPublicIds = [
+    ...(hostel.images || []).map((img) => img.publicId),
+    ...(hostel.roomTypes || []).map((rt) => rt.image?.publicId).filter(Boolean),
   ];
 
-  if (allImageUrls.length && typeof deleteFromCloudinary === "function") {
-    await Promise.allSettled(allImageUrls.map((url) => deleteFromCloudinary(url)));
+  if (allPublicIds.length) {
+    await Promise.allSettled(allPublicIds.map((id) => deleteFromCloudinary(id)));
   }
 
   return removeHostel(hostel);

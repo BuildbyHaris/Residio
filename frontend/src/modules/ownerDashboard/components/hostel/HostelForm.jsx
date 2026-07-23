@@ -51,7 +51,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
             price: rt.price,
             availableBeds: rt.availableBeds,
             imageFile: null, // new upload if owner changes it
-            existingImage: rt.image || null, // show current image
+            existingImage: rt.image?.url || null, // show current image
           })) || emptyFormState.roomTypes,
       });
     }
@@ -153,12 +153,12 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
     form.append("totalBeds", formData.totalBeds);
     form.append("amenities", JSON.stringify(formData.amenities));
 
-    // Keep existing image URL if no new file was chosen (so backend doesn't lose it)
+    // Image field intentionally omitted here — backend retains existing image
+    // object ({url, publicId}) automatically when no new file is uploaded.
     const roomTypesPayload = formData.roomTypes.map((rt) => ({
       type: rt.type,
       price: Number(rt.price),
       availableBeds: Number(rt.availableBeds),
-      image: rt.imageFile ? null : rt.existingImage || null,
     }));
     form.append("roomTypes", JSON.stringify(roomTypesPayload));
 
@@ -321,10 +321,25 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2"
             />
             {hostelImages.length > 0 && (
-              <p className="text-xs text-gray-500 mt-1">
-                {hostelImages.length} file(s) selected
-              </p>
-            )}
+  <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+    {hostelImages.map((file, index) => (
+      <div
+        key={index}
+        className="relative border rounded-lg overflow-hidden"
+      >
+        <img
+          src={URL.createObjectURL(file)}
+          alt={`Preview ${index + 1}`}
+          className="h-24 w-full object-cover"
+        />
+
+        <p className="text-[10px] p-1 truncate">
+          {file.name}
+        </p>
+      </div>
+    ))}
+  </div>
+)}
             {errors.hostelImages && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.hostelImages}
@@ -369,7 +384,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
 
                     <input
                       type="number"
-                      placeholder="Beds"
+                      placeholder="Available Beds"
                       value={rt.availableBeds}
                       onChange={(e) =>
                         handleRoomTypeChange(
@@ -378,7 +393,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                           e.target.value
                         )
                       }
-                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-20"
+                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-32"
                     />
 
                     {formData.roomTypes.length > 1 && (

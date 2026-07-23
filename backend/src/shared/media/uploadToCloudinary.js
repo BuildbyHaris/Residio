@@ -7,14 +7,18 @@ export const uploadToCloudinary = (fileBuffer, folder = "risido/hostels") => {
       { folder },
       (error, result) => {
         if (error) return reject(error);
-        resolve(result.secure_url);
+        resolve({ url: result.secure_url, publicId: result.public_id });
       }
     );
     streamifier.createReadStream(fileBuffer).pipe(uploadStream);
   });
 };
-// uploadToCloudinary.js ke end mein yeh add karein:
+
 export const deleteFromCloudinary = async (publicId) => {
-  console.log("Mock delete triggered for:", publicId);
-  return { result: "ok" };
+  if (!publicId) return;
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error("Cloudinary delete failed:", error.message);
+  }
 };
