@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const hostelApi = axios.create({
-  baseURL: "http://localhost:5000/api/v1/hostels",
+  baseURL: "http://localhost:5000/api/v1/hostels/",
   withCredentials: true,
 });
 
 export const createHostelApi = (formData) => {
-  return hostelApi.post("/", formData, {
+  return hostelApi.post("", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
