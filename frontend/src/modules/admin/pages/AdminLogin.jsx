@@ -1,36 +1,51 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AdminLoginForm from '../components/AdminLoginForm';
-import { loginAdmin } from '../services/admin.service';
 import { HiOutlineShieldCheck } from 'react-icons/hi';
-import { AuthContext } from '../../../context/AuthContext';
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
+  const { loginAdmin } = useAdminAuth();
 
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
   const handleLogin = async (email, password) => {
     setLoading(true);
-    setServerError('');
+    setServerError("");
 
-    const result = await loginAdmin(email, password);
+    try {
+      const result = await loginAdmin({
+  email,
+  password,
+});
 
-    if (result.success) {
-      toast.success('Welcome back, Admin! 🎉');
+      console.log("Admin login result:", result);
 
-      setUser(result.data.admin);
+      if (result.success) {
+        toast.success("Welcome back, Admin! 🎉");
 
-      navigate('/admin/dashboard', { replace: true });
-    } else {
-      setServerError(result.message);
+        navigate("/admin/dashboard", {
+          replace: true,
+        });
+
+        return;
+      }
+
+      setServerError(
+        result.message || "Admin login failed"
+      );
+    } catch (error) {
+      console.error("Admin Login Error:", error);
+
+      setServerError(
+        "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (

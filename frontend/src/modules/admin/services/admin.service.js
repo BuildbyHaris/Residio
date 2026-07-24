@@ -9,25 +9,23 @@ import {
   rejectOwnerVerificationApi,
 } from "../api/admin.api";
 
-/**
- * ============================================================
- * Friendly Error Handler
- * ============================================================
- */
-
 const getFriendlyErrorMessage = (error) => {
   if (!error.response) {
     return "We couldn't connect to the server right now. Please check your connection and try again.";
   }
 
   const status = error.response.status;
-  const backendMessage = error.response?.data?.message || "";
+  const backendMessage =
+    error.response?.data?.message || "";
+
+  const normalizedMessage =
+    backendMessage.toLowerCase();
 
   switch (status) {
     case 400:
       if (
-        backendMessage.toLowerCase().includes("email") &&
-        backendMessage.toLowerCase().includes("password")
+        normalizedMessage.includes("email") &&
+        normalizedMessage.includes("password")
       ) {
         return "Please enter both your email and password to sign in.";
       }
@@ -38,13 +36,15 @@ const getFriendlyErrorMessage = (error) => {
       );
 
     case 401:
-      if (backendMessage.toLowerCase().includes("verify")) {
+      if (
+        normalizedMessage.includes("verify")
+      ) {
         return "Your admin account still needs email verification. Please verify your email before signing in.";
       }
 
       if (
-        backendMessage.toLowerCase().includes("invalid") ||
-        backendMessage.toLowerCase().includes("password")
+        normalizedMessage.includes("invalid") ||
+        normalizedMessage.includes("password")
       ) {
         return "Your email or password doesn't look right. Please check your details and try again.";
       }
@@ -55,11 +55,17 @@ const getFriendlyErrorMessage = (error) => {
       return "You don't have permission to access the Admin Panel.";
 
     case 404:
-      if (backendMessage.toLowerCase().includes("verification")) {
+      if (
+        normalizedMessage.includes(
+          "verification"
+        )
+      ) {
         return "We couldn't find this verification request. It may have already been processed.";
       }
 
-      if (backendMessage.toLowerCase().includes("admin")) {
+      if (
+        normalizedMessage.includes("admin")
+      ) {
         return "No admin account found with this email address.";
       }
 
@@ -91,215 +97,196 @@ const getFriendlyErrorMessage = (error) => {
   }
 };
 
-/**
- * ============================================================
- * Admin Login
- * ============================================================
- */
-
-export const loginAdmin = async (email, password) => {
+export const loginAdmin = async (
+  email,
+  password
+) => {
   try {
-    const response = await adminLoginApi({
-      email,
-      password,
-    });
+    const response =
+      await adminLoginApi({
+        email,
+        password,
+      });
 
     return {
       success: true,
-      data: response?.data || response,
+      data: response?.admin || null,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      message: getFriendlyErrorMessage(error),
+      data: null,
+      message:
+        getFriendlyErrorMessage(error),
     };
   }
 };
-
-/**
- * ============================================================
- * Get Current Logged-In Admin
- *
- * This is called after page refresh.
- * The browser sends the HTTP-only admin cookie automatically.
- * ============================================================
- */
 
 export const getCurrentAdmin = async () => {
   try {
-    const response = await getCurrentAdminApi();
+    const response =
+      await getCurrentAdminApi();
 
     return {
       success: true,
-      data:
-        response?.admin ||
-        response?.data?.admin ||
-        response?.data ||
-        response,
+      data: response?.admin || null,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      message: getFriendlyErrorMessage(error),
+      data: null,
+      message:
+        getFriendlyErrorMessage(error),
     };
   }
 };
-
-/**
- * ============================================================
- * Admin Logout
- * ============================================================
- */
 
 export const logoutAdmin = async () => {
   try {
-    const response = await adminLogoutApi();
-
-    return {
-      success: true,
-      data: response?.data || response,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: getFriendlyErrorMessage(error),
-    };
-  }
-};
-
-/**
- * ============================================================
- * Dashboard Stats
- * ============================================================
- */
-
-export const getDashboardStats = async () => {
-  try {
-    const response = await getDashboardStatsApi();
-
-    return {
-      success: true,
-      data: response?.data || response,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: getFriendlyErrorMessage(error),
-    };
-  }
-};
-
-/**
- * ============================================================
- * Owner Verification List
- * ============================================================
- */
-
-export const getPendingVerificationRequests = async (
-  page = 1,
-  limit = 10
-) => {
-  try {
     const response =
-      await getPendingVerificationRequestsApi(
-        page,
-        limit
-      );
-
-    return {
-      success: true,
-      data: response?.data || response,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: getFriendlyErrorMessage(error),
-    };
-  }
-};
-
-/**
- * ============================================================
- * Owner Verification Details
- * ============================================================
- */
-
-export const getOwnerVerificationDetails = async (
-  verificationId
-) => {
-  try {
-    const response =
-      await getOwnerVerificationDetailsApi(
-        verificationId
-      );
+      await adminLogoutApi();
 
     return {
       success: true,
       data:
-        response?.data ||
-        response?.verification ||
-        response,
+        response?.data || response,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      message: getFriendlyErrorMessage(error),
+      data: null,
+      message:
+        getFriendlyErrorMessage(error),
     };
   }
 };
 
-/**
- * ============================================================
- * Approve Owner Verification
- * ============================================================
- */
-
-export const approveOwnerVerification = async (
-  verificationId
-) => {
+export const getDashboardStats = async () => {
   try {
     const response =
-      await approveOwnerVerificationApi(
-        verificationId
-      );
+      await getDashboardStatsApi();
 
     return {
       success: true,
-      data: response?.data || response,
+      data:
+        response?.data || response,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      message: getFriendlyErrorMessage(error),
+      data: null,
+      message:
+        getFriendlyErrorMessage(error),
     };
   }
 };
 
-/**
- * ============================================================
- * Reject Owner Verification
- * ============================================================
- */
+export const getPendingVerificationRequests =
+  async (
+    page = 1,
+    limit = 10
+  ) => {
+    try {
+      const response =
+        await getPendingVerificationRequestsApi(
+          page,
+          limit
+        );
 
-export const rejectOwnerVerification = async (
-  verificationId,
-  rejectionReason
-) => {
-  try {
-    const response =
-      await rejectOwnerVerificationApi(
-        verificationId,
-        rejectionReason
-      );
+      return {
+        success: true,
+        data:
+          response?.data || response,
+        message: response?.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        message:
+          getFriendlyErrorMessage(error),
+      };
+    }
+  };
 
-    return {
-      success: true,
-      data: response?.data || response,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: getFriendlyErrorMessage(error),
-    };
-  }
-};
+export const getOwnerVerificationDetails =
+  async (verificationId) => {
+    try {
+      const response =
+        await getOwnerVerificationDetailsApi(
+          verificationId
+        );
+
+      return {
+        success: true,
+        data:
+          response?.data ||
+          response?.verification ||
+          response,
+        message: response?.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        message:
+          getFriendlyErrorMessage(error),
+      };
+    }
+  };
+
+export const approveOwnerVerification =
+  async (verificationId) => {
+    try {
+      const response =
+        await approveOwnerVerificationApi(
+          verificationId
+        );
+
+      return {
+        success: true,
+        data:
+          response?.data || response,
+        message: response?.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        message:
+          getFriendlyErrorMessage(error),
+      };
+    }
+  };
+
+export const rejectOwnerVerification =
+  async (
+    verificationId,
+    rejectionReason
+  ) => {
+    try {
+      const response =
+        await rejectOwnerVerificationApi(
+          verificationId,
+          rejectionReason
+        );
+
+      return {
+        success: true,
+        data:
+          response?.data || response,
+        message: response?.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        message:
+          getFriendlyErrorMessage(error),
+      };
+    }
+  };

@@ -15,209 +15,149 @@ import {
 
 const AdminAuthContext = createContext(null);
 
-export const AdminAuthProvider = ({ children }) => {
-  /**
-   * ============================================================
-   * Admin State
-   *
-   * We initially restore the cached admin from localStorage
-   * so the UI does not immediately assume the admin is logged out.
-   * ============================================================
-   */
+const ADMIN_STORAGE_KEY = "adminInfo";
 
+export const AdminAuthProvider = ({
+  children,
+}) => {
   const [admin, setAdmin] = useState(() => {
     try {
       const storedAdmin =
-        localStorage.getItem("adminInfo");
+        localStorage.getItem(
+          ADMIN_STORAGE_KEY
+        );
 
-      return storedAdmin
-        ? JSON.parse(storedAdmin)
-        : null;
+      if (!storedAdmin) {
+        return null;
+      }
+
+      return JSON.parse(storedAdmin);
     } catch (error) {
       console.error(
         "Failed to restore admin from localStorage:",
         error
       );
 
+      localStorage.removeItem(
+        ADMIN_STORAGE_KEY
+      );
+
       return null;
     }
   });
+  const [loading, setLoading] =
+    useState(true);
 
-  /**
-   * ============================================================
-   * Loading State
-   *
-   * IMPORTANT:
-   * While this is true, AdminProtectedRoute will show
-   * "Loading admin panel..."
-   *
-   * This prevents redirecting to login before /admin/me
-   * has checked the HTTP-only cookie.
-   * ============================================================
-   */
+  const clearAdminSession =
+    useCallback(() => {
+      setAdmin(null);
 
-  const [loading, setLoading] = useState(true);
-
-  /**
-   * ============================================================
-   * Restore Admin Session
-   *
-   * This runs on:
-   * - Initial application load
-   * - Page refresh
-   *
-   * The backend checks the HTTP-only admin cookie.
-   * ============================================================
-   */
-
-  const refreshAdmin = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      const response = await getCurrentAdmin();
-
-      console.log(
-        "Current admin response:",
-        response
+      localStorage.removeItem(
+        ADMIN_STORAGE_KEY
       );
+    }, []);
 
-      /**
-       * Service returns:
-       *
-       * {
-       *   success: true,
-       *   data: adminObject
-       * }
-       */
+  const refreshAdmin = useCallback(
+    async () => {
+      try {
+        setLoading(true);
 
-      if (
-        response?.success &&
-        response?.data
-      ) {
-        const currentAdmin =
-          response.data;
+        const response =
+          await getCurrentAdmin();
 
-        setAdmin(currentAdmin);
-
-        localStorage.setItem(
-          "adminInfo",
-          JSON.stringify(currentAdmin)
+        console.log(
+          "Current admin session response:",
+          response
         );
 
-        return currentAdmin;
+        if (
+          response?.success &&
+          response?.data
+        ) {
+          const currentAdmin =
+            response.data;
+
+          setAdmin(currentAdmin);
+
+          localStorage.setItem(
+            ADMIN_STORAGE_KEY,
+            JSON.stringify(
+              currentAdmin
+            )
+          );
+
+          return currentAdmin;
+        }
+        clearAdminSession();
+
+        return null;
+      } catch (error) {
+        console.error(
+          "Failed to restore admin session:",
+          error
+        );
+        clearAdminSession();
+
+        return null;
+      } finally {
+        setLoading(false);
       }
-
-      /**
-       * If /admin/me returns 401,
-       * the admin session is invalid.
-       */
-
-      setAdmin(null);
-
-      localStorage.removeItem(
-        "adminInfo"
-      );
-
-      return null;
-    } catch (error) {
-      console.error(
-        "Failed to restore admin session:",
-        error
-      );
-
-      setAdmin(null);
-
-      localStorage.removeItem(
-        "adminInfo"
-      );
-
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  /**
-   * ============================================================
-   * Check Session When App Starts
-   * ============================================================
-   */
-
+    },
+    [clearAdminSession]
+  );
   useEffect(() => {
     refreshAdmin();
   }, [refreshAdmin]);
 
-  /**
-   * ============================================================
-   * Admin Login
-   * ============================================================
-   */
+  const handleAdminLogin =
+    useCallback(
+      async (credentials) => {
+        const response =
+          await loginAdmin(
+            credentials.email,
+            credentials.password
+          );
 
-  const handleAdminLogin = async (
-    credentials
-  ) => {
-    const response =
-      await loginAdmin(
-        credentials.email,
-        credentials.password
-      );
+        console.log(
+          "Admin login response:",
+          response
+        );
 
-    console.log(
-      "Admin login response:",
-      response
+        if (
+          response?.success &&
+          response?.data
+        ) {
+          const loggedInAdmin =
+            response.data;
+
+          setAdmin(loggedInAdmin);
+
+          localStorage.setItem(
+            ADMIN_STORAGE_KEY,
+            JSON.stringify(
+              loggedInAdmin
+            )
+          );
+        }
+
+        return response;
+      },
+      []
     );
 
-    if (
-      response?.success &&
-      response?.data
-    ) {
-      const loggedInAdmin =
-        response.data;
-
-      setAdmin(loggedInAdmin);
-
-      localStorage.setItem(
-        "adminInfo",
-        JSON.stringify(loggedInAdmin)
-      );
-    }
-
-    return response;
-  };
-
-  /**
-   * ============================================================
-   * Admin Logout
-   * ============================================================
-   */
-
-  const handleAdminLogout = async () => {
-    try {
-      await logoutAdmin();
-    } catch (error) {
-      console.error(
-        "Admin logout error:",
-        error
-      );
-    } finally {
-      /**
-       * Always clear frontend auth state
-       * even if backend logout fails.
-       */
-
-      setAdmin(null);
-
-      localStorage.removeItem(
-        "adminInfo"
-      );
-    }
-  };
-
-  /**
-   * ============================================================
-   * Context Value
-   * ============================================================
-   */
+  const handleAdminLogout =
+    useCallback(async () => {
+      try {
+        await logoutAdmin();
+      } catch (error) {
+        console.error(
+          "Admin logout error:",
+          error
+        );
+      } finally {
+        clearAdminSession();
+      }
+    }, [clearAdminSession]);
 
   const value = useMemo(
     () => ({
@@ -239,6 +179,8 @@ export const AdminAuthProvider = ({ children }) => {
     [
       admin,
       loading,
+      handleAdminLogin,
+      handleAdminLogout,
       refreshAdmin,
     ]
   );
@@ -251,12 +193,6 @@ export const AdminAuthProvider = ({ children }) => {
     </AdminAuthContext.Provider>
   );
 };
-
-/**
- * ============================================================
- * useAdminAuth Hook
- * ============================================================
- */
 
 export const useAdminAuth = () => {
   const context =

@@ -10,6 +10,8 @@ import {
   approveOwnerVerificationController,
   rejectOwnerVerificationController,
 } from "../controllers/admin.controller.js";
+
+import adminProtect from "../middlewares/adminProtect.middleware.js";
 import { adminOnly } from "../middlewares/admin.middleware.js";
 
 import {
@@ -18,8 +20,6 @@ import {
 } from "../validations/admin.validation.js";
 
 import validate from "../../auth/validations/validation.middleware.js";
-
-import { protect } from "../../auth/middlewares/protect.middleware.js";
 
 const router = express.Router();
 
@@ -31,64 +31,52 @@ router.post(
 
 router.get(
   "/dashboard",
-  protect,
+  adminProtect,
   adminOnly,
   getDashboardStatsController
 );
 
 router.get(
   "/owner-verifications",
-  protect,
+  adminProtect,
   adminOnly,
   getPendingVerificationRequestsController
 );
 
 router.get(
   "/owner-verifications/:verificationId",
-  protect,
+  adminProtect,
   adminOnly,
   getOwnerVerificationDetailsController
 );
 
 router.patch(
   "/owner-verifications/:verificationId/approve",
-  protect,
+  adminProtect,
   adminOnly,
   approveOwnerVerificationController
 );
 
-router.post(
-  "/logout",
-  protect,
+router.patch(
+  "/owner-verifications/:verificationId/reject",
+  adminProtect,
   adminOnly,
-  logoutAdminController
+  validate(rejectOwnerVerificationValidation),
+  rejectOwnerVerificationController
 );
 
 router.get(
   "/me",
-  protect,
+  adminProtect,
   adminOnly,
   getCurrentAdminController
 );
 
-router.patch(
-  "/owner-verifications/:verificationId/reject",
-  (req, res, next) => {
-    console.log("🔥 REJECT ROUTE MATCHED");
-    next();
-  },
-  protect,
-   (req, res, next) => {
-    console.log("🔥 2. PROTECT PASSED");
-    console.log("Authenticated user:", req.user);
-    next();
-  },
+router.post(
+  "/logout",
+  adminProtect,
   adminOnly,
-  (req, res, next) => {
-    console.log("🔥 3. ADMIN ONLY PASSED");
-    next();
-  },
-  rejectOwnerVerificationController
+  logoutAdminController
 );
 
 export default router;

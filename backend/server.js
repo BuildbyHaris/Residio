@@ -8,6 +8,7 @@ import profileRoutes from "./src/modules/profile/routes/profile.routes.js";
 import hostelRoutes from "./src/modules/ownerDashboard/routes/hostel.routes.js";
 import errorMiddleware from "./src/shared/middlewares/error.middleware.js";
 import ownerVerificationRoutes from "./src/modules/ownerVerification/routes/ownerVerification.routes.js";
+import adminRoutes from "./src/modules/admin/routes/admin.routes.js";
 
 // Note: Apne hostel module folder ke mutabiq path check kar lein
 
@@ -41,6 +42,10 @@ app.use(
     ownerVerificationRoutes
 );
 app.use("/api/v1/hostels", hostelRoutes);
+app.use(
+  "/api/v1/admin",
+  adminRoutes
+);
 app.use(errorMiddleware);
 
 // MongoDB Connection

@@ -1,3 +1,4 @@
+
 import {
   loginAdmin,
   getDashboardStats,
@@ -7,9 +8,6 @@ import {
   rejectOwnerVerification,
 } from "../services/admin.service.js";
 
-/**
- * Admin Login
- */
 export const loginAdminController = async (
   req,
   res,
@@ -18,15 +16,34 @@ export const loginAdminController = async (
   try {
     const result = await loginAdmin(req.body);
 
-    res.cookie("accessToken", result.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite:
-        process.env.NODE_ENV === "production"
-          ? "none"
-          : "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    if (result.success && result.token) {
+      res.cookie(
+        "adminAccessToken",
+        result.token,
+        {
+          httpOnly: true,
+
+          secure:
+            process.env.NODE_ENV ===
+            "production",
+
+          sameSite:
+            process.env.NODE_ENV ===
+              "production"
+              ? "none"
+              : "lax",
+
+          path: "/",
+
+          maxAge:
+            7 *
+            24 *
+            60 *
+            60 *
+            1000,
+        }
+      );
+    }
 
     return res.status(200).json({
       success: result.success,
@@ -37,28 +54,35 @@ export const loginAdminController = async (
     next(error);
   }
 };
-/**
- * Dashboard Statistics
- */
-export const getDashboardStatsController =
-  async (req, res, next) => {
-    try {
-      const result =
-        await getDashboardStats();
 
-      return res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  };
+export const getDashboardStatsController = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const result =
+      await getDashboardStats();
 
-  /**
- * Pending Verification Requests
- */
+    return res
+      .status(200)
+      .json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getPendingVerificationRequestsController =
-  async (req, res, next) => {
+  async (
+    req,
+    res,
+    next
+  ) => {
     try {
-      const { page, limit } = req.query;
+      const {
+        page,
+        limit,
+      } = req.query;
 
       const result =
         await getPendingVerificationRequests({
@@ -66,104 +90,149 @@ export const getPendingVerificationRequestsController =
           limit,
         });
 
-      return res.status(200).json(result);
+      return res
+        .status(200)
+        .json(result);
     } catch (error) {
       next(error);
     }
   };
 
-  /**
- * Verification Details
- */
+
+
 export const getOwnerVerificationDetailsController =
-  async (req, res, next) => {
+  async (
+    req,
+    res,
+    next
+  ) => {
     try {
       const result =
         await getOwnerVerificationDetails(
           req.params.verificationId
         );
 
-      return res.status(200).json(result);
+      return res
+        .status(200)
+        .json(result);
     } catch (error) {
       next(error);
     }
   };
 
-  /**
- * Approve Verification
- */
+
+
 export const approveOwnerVerificationController =
-  async (req, res, next) => {
+  async (
+    req,
+    res,
+    next
+  ) => {
     try {
       const result =
         await approveOwnerVerification({
           verificationId:
             req.params.verificationId,
-          adminId: req.user._id,
+
+          /**
+           * adminProtect has already authenticated
+           * the Admin and attached the Admin document
+           * to req.user.
+           */
+
+          adminId:
+            req.user._id,
         });
 
-      return res.status(200).json(result);
+      return res
+        .status(200)
+        .json(result);
     } catch (error) {
       next(error);
     }
   };
 
-  /**
- * Reject Verification
- */
+
 export const rejectOwnerVerificationController =
-  async (req, res, next) => {
+  async (
+    req,
+    res,
+    next
+  ) => {
     try {
-         console.log("🔥 REJECT CONTROLLER HIT");
-      console.log("Params:", req.params);
-      console.log("Body:", req.body);
-      console.log("Admin:", req.user);
       const result =
         await rejectOwnerVerification({
           verificationId:
             req.params.verificationId,
-          adminId: req.user._id,
+
+          adminId:
+            req.user._id,
+
           rejectionReason:
             req.body.rejectionReason,
         });
 
-      return res.status(200).json(result);
+      return res
+        .status(200)
+        .json(result);
     } catch (error) {
       next(error);
     }
   };
 
-  export const logoutAdminController = async (req, res, next) => {
-  try {
-    res.clearCookie("accessToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite:
-        process.env.NODE_ENV === "production"
-          ? "none"
-          : "lax",
-    });
+export const logoutAdminController =
+  async (
+    req,
+    res,
+    next
+  ) => {
+    try {
+      res.clearCookie(
+        "adminAccessToken",
+        {
+          httpOnly: true,
 
-    return res.status(200).json({
-      success: true,
-      message: "Admin logged out successfully.",
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+          secure:
+            process.env.NODE_ENV ===
+            "production",
 
-export const getCurrentAdminController = async (
-  req,
-  res,
-  next
-) => {
-  try {
-    return res.status(200).json({
-      success: true,
-      admin: req.user,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+          sameSite:
+            process.env.NODE_ENV ===
+              "production"
+              ? "none"
+              : "lax",
+
+          path: "/",
+        }
+      );
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+          message:
+            "Admin logged out successfully.",
+        });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+export const getCurrentAdminController =
+  async (
+    req,
+    res,
+    next
+  ) => {
+    try {
+      return res
+        .status(200)
+        .json({
+          success: true,
+          admin: req.user,
+        });
+    } catch (error) {
+      next(error);
+    }
+  };
+
