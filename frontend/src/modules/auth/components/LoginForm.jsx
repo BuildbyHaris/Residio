@@ -33,7 +33,11 @@ const LoginForm = () => {
           toast.success("Successfully logged in with Google!");
           localStorage.setItem("user", JSON.stringify(result.user));
           setUser(result.user);
-          navigate("/");
+          if (result.user.role === "owner") {
+            navigate("/owner-dashboard");
+          } else {
+            navigate("/");
+          }
         } else {
           setErrors({ server: result.message });
         }
@@ -87,10 +91,15 @@ const LoginForm = () => {
     setErrors({});
 
     try {
-      const response = await login(formData);
-      localStorage.setItem("user", JSON.stringify(response.user));
-      setUser(response.user);
-      navigate("/");
+       const response = await login(formData);
+       localStorage.setItem("user", JSON.stringify(response.user));
+       setUser(response.user);
+       
+       if (response.user.role === "owner") {
+        navigate("/owner-dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Something went wrong";
       if (errorMessage.toLowerCase().includes("verify your email")) {

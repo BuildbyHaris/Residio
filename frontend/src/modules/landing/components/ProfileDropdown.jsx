@@ -68,7 +68,7 @@ const ProfileDropdown = () => {
         <div className="absolute right-0 mt-3 w-60 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl z-50">
 
           <Link
-            to="/profile"
+            to={user?.role === "owner" ? "/owner-dashboard" : "/profile"}
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 px-5 py-3 transition hover:bg-gray-50"
           >

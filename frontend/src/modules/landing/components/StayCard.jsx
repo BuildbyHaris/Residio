@@ -1,14 +1,19 @@
 import React from 'react';
-import { MapPin, Wifi, Bike, Utensils, AirVent, Heart } from 'lucide-react';
+import { MapPin, Wifi, Bike, Utensils, AirVent, Heart, Shield, Zap, Droplet, Car } from 'lucide-react';
 import Badge from './Badge';
 import RatingStars from './RatingStars';
 import Button from './Button';
 
 var amenityIconMap = {
   wifi: Wifi,
-  bike: Bike,
-  utensils: Utensils,
+  food: Utensils,
+  laundry: Droplet,
+  parking: Car,
   ac: AirVent,
+  security: Shield,
+  powerbackup: Zap,
+  hotwater: Droplet,
+  bike: Bike,
 };
 
 function StayCard({ image, title, location, amenities, rating, reviewCount, priceLabel }) {
@@ -59,7 +64,7 @@ function StayCard({ image, title, location, amenities, rating, reviewCount, pric
 
         {/* Book Button */}
         <Button variant="primary" className="w-full mt-3 text-sm py-2">
-          Book Now
+          Call Now
         </Button>
       </div>
     </div>
