@@ -5,10 +5,15 @@ import {
   Navigate,
 } from "react-router-dom";
 
-// =========================
-// Public / Auth Pages
-// =========================
+// Landing
 import LandingPage from "../modules/landing/pages/Landing";
+import FindHostels from "../modules/landing/pages/FindHostels";
+import PGs from "../modules/landing/pages/PGs";
+import HowItWorks from "../modules/landing/pages/HowItWorks";
+import About from "../modules/landing/pages/About";
+import Contact from "../modules/landing/pages/Contact";
+
+// Auth
 import Register from "../modules/auth/pages/Register";
 import VerifyOtp from "../modules/auth/pages/VerifyOtp";
 import Login from "../modules/auth/pages/Login";
@@ -16,51 +21,59 @@ import ForgotPassword from "../modules/auth/pages/ForgotPassword";
 import VerifyResetOtp from "../modules/auth/pages/VerifyResetOtp";
 import ResetPassword from "../modules/auth/pages/ResetPassword";
 
-// =========================
-// User Pages
-// =========================
+// User
 import ProfilePage from "../modules/profile/pages/ProfilePage";
 
-// =========================
-// Owner Pages
-// =========================
+// Owner
 import OwnerDashboard from "../modules/ownerDashboard/pages/ownerDashboard";
 import OwnerVerificationPage from "../modules/ownerVerification/pages/OwnerVerificationPage";
 
-// =========================
-// Admin Pages
-// =========================
+// Admin
 import AdminLogin from "../modules/admin/pages/AdminLogin";
 import AdminDashboard from "../modules/admin/pages/AdminDashboard";
 import OwnerVerifications from "../modules/admin/pages/OwnerVerifications";
 import OwnerVerificationDetailsPage from "../modules/admin/pages/OwnerVerificationDetails";
 
-// =========================
-// Route Guards
-// =========================
+// Guards
 import ProtectedRoute from "./ProtectedRoute";
 import AdminProtectedRoute from "./AdminProtectedRoute";
-
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* =====================================
-            PUBLIC LANDING
-        ====================================== */}
-
+        {/* Landing */}
         <Route
           path="/"
           element={<LandingPage />}
         />
+        <Route
+          path="/find-hostels"
+          element={<FindHostels />}
+        />
 
+        <Route
+          path="/pgs"
+          element={<PGs />}
+        />
 
-        {/* =====================================
-            USER AUTHENTICATION
-        ====================================== */}
+        <Route
+          path="/how-it-works"
+          element={<HowItWorks />}
+        />
 
+        <Route
+          path="/about"
+          element={<About />}
+        />
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+
+        {/* Auth */}
         <Route
           path="/register"
           element={<Register />}
@@ -91,13 +104,8 @@ const AppRoutes = () => {
           element={<ResetPassword />}
         />
 
-
-        {/* =====================================
-            USER PROTECTED ROUTES
-        ====================================== */}
-
+        {/* User Protected */}
         <Route element={<ProtectedRoute />}>
-
           <Route
             path="/profile"
             element={<ProfilePage />}
@@ -107,15 +115,9 @@ const AppRoutes = () => {
             path="/owner-verification"
             element={<OwnerVerificationPage />}
           />
-
         </Route>
 
-
-        {/* =====================================
-            OWNER DASHBOARD
-            Only users with role = owner
-        ====================================== */}
-
+        {/* Owner Dashboard */}
         <Route
           element={
             <ProtectedRoute allowedRole="owner" />
@@ -127,24 +129,14 @@ const AppRoutes = () => {
           />
         </Route>
 
-
-        {/* =====================================
-            ADMIN LOGIN
-            Public route
-        ====================================== */}
-
+        {/* Admin Login */}
         <Route
           path="/admin/login"
           element={<AdminLogin />}
         />
 
-
-        {/* =====================================
-            ADMIN PROTECTED ROUTES
-        ====================================== */}
-
+        {/* Admin Protected */}
         <Route element={<AdminProtectedRoute />}>
-
           <Route
             path="/admin/dashboard"
             element={<AdminDashboard />}
@@ -161,14 +153,9 @@ const AppRoutes = () => {
               <OwnerVerificationDetailsPage />
             }
           />
-
         </Route>
 
-
-        {/* =====================================
-            404
-        ====================================== */}
-
+        {/* 404 */}
         <Route
           path="*"
           element={

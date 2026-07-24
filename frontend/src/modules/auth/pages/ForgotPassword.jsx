@@ -13,14 +13,19 @@ const ForgotPassword = () => {
           <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#ec6a52] opacity-20 blur-3xl pointer-events-none translate-y-16 -translate-x-16" />
 
           {/* Logo */}
-          <div className="relative z-10 flex items-center gap-2 mb-10">
-            <div className="w-10 h-10 rounded-lg bg-[#ec6a52] flex items-center justify-center">
+          <Link
+            to="/"
+            className="mb-6 flex items-center gap-2"
+            aria-label="Go to Residio home"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#ec6a52] shadow-md">
               <FaHome className="text-white" size={20} />
             </div>
-            <h1 className="text-3xl font-bold text-[#1e293b] tracking-tight">
+
+            <h1 className="text-2xl font-bold text-gray-900">
               Residio
             </h1>
-          </div>
+          </Link>
 
           {/* Heading */}
           <div className="relative z-10 mb-8">
