@@ -29,11 +29,11 @@ function HeroSection() {
 
           {/* Right Column */}
           <div className="hidden md:block">
-            <div className="rounded-2xl overflow-hidden">
+            <div className="overflow-hidden rounded-2xl">
               <img
                 src={heroImage}
                 alt="Happy residents at Residio"
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover object-top"
               />
             </div>
           </div>

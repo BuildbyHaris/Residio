@@ -38,4 +38,8 @@ export const ROUTES = {
   ADMIN_REPORTS: "/admin/reports",
   ADMIN_NOTIFICATIONS: "/admin/notifications",
   ADMIN_SETTINGS: "/admin/settings",
+
+  // Add these lines
+FIND_HOSTEL: "/find-hostel",
+HOSTEL_DETAIL: "/hostel/:id",
 };

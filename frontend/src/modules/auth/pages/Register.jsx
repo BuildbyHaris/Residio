@@ -1,4 +1,5 @@
 import RegisterForm from "../components/RegisterForm";
+import { Link } from "react-router-dom";
 import { FaHome, FaSearch, FaShieldAlt, FaHeadset } from "react-icons/fa";
 // import heroImage from "../assets/hero-students.jpg"; // 👈 Add your image here
 
@@ -6,10 +7,10 @@ const Register = () => {
   return (
     <div className="min-h-screen w-full bg-[#fdf6ee] flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-[1400px] bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 relative">
-        
+
         {/* ================= LEFT PANEL ================= */}
         <div className="relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#fdf6ee] via-[#fdeee4] to-[#fce4d6] min-h-[700px]">
-          
+
           {/* Hero Background Image */}
           <div className="absolute inset-0 z-0">
             <img
@@ -44,14 +45,21 @@ const Register = () => {
 
           {/* Content Layer */}
           <div className="relative z-20 p-8 md:p-12 flex flex-col justify-between h-full">
-            
+
             {/* Logo */}
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-[#ec6a52] rounded-lg flex items-center justify-center shadow-md">
+            <Link
+              to="/"
+              className="mb-6 flex items-center gap-2"
+              aria-label="Go to Residio home"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#ec6a52] shadow-md">
                 <FaHome className="text-white" size={20} />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Residio</h1>
-            </div>
+
+              <h1 className="text-2xl font-bold text-gray-900">
+                Residio
+              </h1>
+            </Link>
 
             {/* Headline */}
             <div>

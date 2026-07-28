@@ -33,7 +33,11 @@ const LoginForm = () => {
           toast.success("Successfully logged in with Google!");
           localStorage.setItem("user", JSON.stringify(result.user));
           setUser(result.user);
-          navigate("/");
+          if (result.user.role === "owner") {
+            navigate("/owner-dashboard");
+          } else {
+            navigate("/");
+          }
         } else {
           setErrors({ server: result.message });
         }
@@ -87,10 +91,15 @@ const LoginForm = () => {
     setErrors({});
 
     try {
-      const response = await login(formData);
-      localStorage.setItem("user", JSON.stringify(response.user));
-      setUser(response.user);
-      navigate("/");
+       const response = await login(formData);
+       localStorage.setItem("user", JSON.stringify(response.user));
+       setUser(response.user);
+       
+       if (response.user.role === "owner") {
+        navigate("/owner-dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Something went wrong";
       if (errorMessage.toLowerCase().includes("verify your email")) {
@@ -141,7 +150,7 @@ const LoginForm = () => {
             <input
               type="text"
               name="email"
-              placeholder="Email Address or Phone Number"
+              placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
               className="w-full bg-transparent outline-none px-3 py-3.5 text-[15px] text-gray-800 placeholder-gray-400"
@@ -231,14 +240,14 @@ const LoginForm = () => {
         </p>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 pt-2">
+        {/* <div className="flex items-center gap-3 pt-2">
           <div className="h-px flex-1 bg-gray-200" />
           <span className="text-sm text-gray-500">or</span>
           <div className="h-px flex-1 bg-gray-200" />
-        </div>
+        </div> */}
 
-        {/* Social buttons - at the END as requested */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/*Social buttons - at the END as requested */}
+         {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => handleGoogleLogin()}
@@ -255,7 +264,7 @@ const LoginForm = () => {
             <FaFacebook size={18} className="text-[#1877F2]" />
             Continue with Facebook
           </button>
-        </div>
+        </div> */}
 
         {/* Trust badges */}
         <div className="pt-6 border-t border-gray-100">

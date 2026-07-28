@@ -23,3 +23,5 @@ export const validate = (schema) => {
     next();
   };
 };
+
+export default validate;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { Home, ArrowRight } from 'lucide-react';
 
 function CTABanner() {
@@ -24,10 +25,13 @@ function CTABanner() {
         </div>
       </div>
 
-      <button className="bg-white text-brand-orange font-medium rounded-full px-6 py-3 flex items-center gap-2 hover:bg-brand-peachLight transition-colors relative z-10 cursor-pointer flex-shrink-0">
+      <Link
+        to="/register"
+        className="relative z-10 flex flex-shrink-0 cursor-pointer items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-brand-orange transition-colors hover:bg-brand-peachLight"
+      >
         Get Started
-        <ArrowRight className="w-4 h-4" />
-      </button>
+        <ArrowRight className="h-4 w-4" />
+      </Link>
     </div>
   );
 }

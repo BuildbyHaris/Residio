@@ -1,20 +1,29 @@
-import React from 'react';
+import React from "react";
+import { NavLink as RouterNavLink } from "react-router-dom";
 
-function NavLink({ label, href, active }) {
+function NavLink({ label, href, onClick }) {
   return (
-    <a
-      href={href}
-      className={`relative pb-1 text-sm font-medium transition-colors ${
-        active
-          ? 'text-brand-orange'
-          : 'text-ink-700 hover:text-brand-orange'
-      }`}
+    <RouterNavLink
+      to={href}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `relative pb-1 text-sm font-medium transition-colors ${
+          isActive
+            ? "text-brand-orange"
+            : "text-ink-700 hover:text-brand-orange"
+        }`
+      }
     >
-      {label}
-      {active && (
-        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-orange rounded-full" />
+      {({ isActive }) => (
+        <>
+          {label}
+
+          {isActive && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-orange" />
+          )}
+        </>
       )}
-    </a>
+    </RouterNavLink>
   );
 }
 

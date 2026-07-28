@@ -1,42 +1,65 @@
-import React, { useState } from 'react';
-import { Home, Menu, X } from 'lucide-react';
-import { navLinks } from '../data/navLinks';
-import NavLink from './NavLink';
-import LocationSelector from './LocationSelector';
-import Button from './Button';
+import React, { useState } from "react";
+import { Home, Menu, X } from "lucide-react";
+import { navLinks } from "../data/navLinks";
+import NavLink from "./NavLink";
+import LocationSelector from "./LocationSelector";
+import Button from "./Button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import ProfileDropdown from "./ProfileDropdown";
+import { ROUTES } from "../../../routes/paths.js"; // ✅ Ensure this is present
 
 function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const { isAuthenticated } = useAuth();
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <nav className="flex items-center justify-between px-6 md:px-10 py-4 bg-white border-b border-border-light sticky top-0 z-50">
-      {/* Left: Logo */}
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-brand-orange rounded-lg flex items-center justify-center">
-          <Home className="w-4 h-4 text-white" />
+    <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-border-light bg-white px-6 py-4 md:px-10">
+
+      {/* ============================================================
+          Logo
+      ============================================================ */}
+
+      <Link
+        to="/"
+        className="flex items-center gap-2"
+        aria-label="Go to Residio home"
+        onClick={closeMobileMenu}
+      >
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-orange">
+          <Home className="h-4 w-4 text-white" />
         </div>
-        <span className="font-bold text-xl text-ink-900">Residio</span>
+
+        <span className="text-xl font-bold text-ink-900">
+          Residio
+        </span>
+      </Link>
+
+      {/* ============================================================
+          Desktop Navigation
+      ============================================================ */}
+
+      <div className="hidden items-center gap-6 lg:flex">
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.label}
+            label={link.label}
+            href={link.href}
+          />
+        ))}
       </div>
 
-      {/* Center: Nav Links (desktop) */}
-      <div className="hidden lg:flex items-center gap-6">
-        {navLinks.map(function (link) {
-          return (
-            <NavLink
-              key={link.label}
-              label={link.label}
-              href={link.href}
-              active={link.active}
-            />
-          );
-        })}
-      </div>
+      {/* ============================================================
+          Desktop Right Section
+      ============================================================ */}
 
-      {/* Right: Location + Auth */}
-      <div className="hidden lg:flex items-center gap-4">
+      <div className="hidden items-center gap-4 lg:flex">
+
         <LocationSelector />
 
         {isAuthenticated ? (
@@ -45,7 +68,7 @@ function Navbar() {
           <>
             <Link
               to="/login"
-              className="text-ink-700 font-medium text-sm hover:text-brand-orange transition-colors"
+              className="text-sm font-medium text-ink-700 transition-colors hover:text-brand-orange"
             >
               Log in
             </Link>
@@ -57,34 +80,59 @@ function Navbar() {
             </Link>
           </>
         )}
+
       </div>
-      {/* Mobile hamburger */}
+
+      {/* ============================================================
+          Mobile Menu Button
+      ============================================================ */}
+
       <button
-        className="lg:hidden p-2 text-ink-700 hover:text-brand-orange transition-colors"
-        onClick={function () { setMobileMenuOpen(!mobileMenuOpen); }}
+        type="button"
+        aria-label={
+          mobileMenuOpen
+            ? "Close navigation menu"
+            : "Open navigation menu"
+        }
+        className="p-2 text-ink-700 transition-colors hover:text-brand-orange lg:hidden"
+        onClick={() =>
+          setMobileMenuOpen((prev) => !prev)
+        }
       >
-        {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {mobileMenuOpen ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <Menu className="h-6 w-6" />
+        )}
       </button>
 
-      {/* Mobile menu */}
+      {/* ============================================================
+          Mobile Menu
+      ============================================================ */}
+
       {mobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-b border-border-light shadow-lg lg:hidden z-50">
-          <div className="flex flex-col p-6 gap-4">
-            {navLinks.map(function (link) {
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className={`text-sm font-medium ${link.active ? 'text-brand-orange' : 'text-ink-700'
-                    }`}
-                >
-                  {link.label}
-                </a>
-              );
-            })}
+        <div className="absolute left-0 right-0 top-full z-50 border-b border-border-light bg-white shadow-lg lg:hidden">
+
+          <div className="flex flex-col gap-4 p-6">
+
+            {/* Mobile Navigation Links */}
+
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.label}
+                label={link.label}
+                href={link.href}
+                onClick={closeMobileMenu}
+              />
+            ))}
+
             <hr className="border-border-light" />
 
+            {/* Location */}
+
             <LocationSelector />
+
+            {/* Authentication */}
 
             {isAuthenticated ? (
               <ProfileDropdown />
@@ -92,22 +140,26 @@ function Navbar() {
               <>
                 <Link
                   to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-ink-700 font-medium text-sm hover:text-brand-orange transition-colors"
+                  onClick={closeMobileMenu}
+                  className="text-sm font-medium text-ink-700 transition-colors hover:text-brand-orange"
                 >
                   Log in
                 </Link>
 
                 <Link
                   to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={closeMobileMenu}
                 >
-                  <Button variant="primary" className="w-full">
+                  <Button
+                    variant="primary"
+                    className="w-full"
+                  >
                     Sign Up
                   </Button>
                 </Link>
               </>
             )}
+
           </div>
         </div>
       )}

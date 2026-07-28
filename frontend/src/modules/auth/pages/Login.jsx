@@ -1,4 +1,5 @@
 import LoginForm from "../components/LoginForm";
+import { Link } from "react-router-dom";
 import { FaHome, FaSearch, FaShieldAlt, FaHeadset, FaStar, FaQuoteLeft } from "react-icons/fa";
 
 const features = [
@@ -28,7 +29,7 @@ const Login = () => {
   return (
     <div className="min-h-screen w-full bg-[#fdf6ee] flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-7xl bg-white rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden grid lg:grid-cols-2 min-h-[700px]">
-        
+
         {/* LEFT PANEL */}
         <div className="relative bg-gradient-to-br from-[#fdf6ee] via-[#fce8de] to-[#fdf6ee] p-8 md:p-12 flex flex-col overflow-hidden">
           {/* Decorative blobs */}
@@ -36,14 +37,19 @@ const Login = () => {
           <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-[#ec6a52]/15 blur-2xl pointer-events-none" />
 
           {/* Logo */}
-          <div className="relative z-10 flex items-center gap-2 mb-8">
-            <div className="w-9 h-9 rounded-lg bg-[#ec6a52] flex items-center justify-center">
+          <Link
+            to="/"
+            className="relative z-10 mb-8 flex items-center gap-2"
+            aria-label="Go to Residio home"
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#ec6a52]">
               <FaHome className="text-white" size={16} />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">
               Residio
             </h1>
-          </div>
+          </Link>
 
           {/* Headline */}
           <div className="relative z-10 mb-6">

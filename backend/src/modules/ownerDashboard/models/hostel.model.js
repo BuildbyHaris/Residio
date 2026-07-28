@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+const imageSchema = new mongoose.Schema(
+  {
+    url: { type: String, required: true },
+    publicId: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const roomTypeSchema = new mongoose.Schema(
   {
     type: {
@@ -18,7 +26,7 @@ const roomTypeSchema = new mongoose.Schema(
       min: 0,
     },
     image: {
-      type: String, // Cloudinary secure_url
+      type: imageSchema,
       default: null,
     },
   },
@@ -89,7 +97,7 @@ const hostelSchema = new mongoose.Schema(
     },
 
     images: {
-      type: [String], // Hostel-level general photos (building, common area etc.)
+      type: [imageSchema],
       default: [],
     },
 
