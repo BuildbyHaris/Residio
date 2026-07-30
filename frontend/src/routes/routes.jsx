@@ -27,6 +27,9 @@ import ProfilePage from "../modules/profile/pages/ProfilePage";
 // Owner
 import OwnerDashboard from "../modules/ownerDashboard/pages/ownerDashboard";
 import OwnerVerificationPage from "../modules/ownerVerification/pages/OwnerVerificationPage";
+import MyProperties from "../modules/ownerDashboard/pages/MyProperties";
+import AddProperty from "../modules/ownerDashboard/pages/AddProperty";
+
 
 // Admin
 import AdminLogin from "../modules/admin/pages/AdminLogin";
@@ -126,6 +129,14 @@ const AppRoutes = () => {
           <Route
             path="/owner-dashboard"
             element={<OwnerDashboard />}
+          />
+          <Route
+            path="/owner-dashboard/properties"
+            element={<MyProperties />}
+          />
+          <Route
+            path="/owner-dashboard/add-property"
+            element={<AddProperty />}
           />
         </Route>
 

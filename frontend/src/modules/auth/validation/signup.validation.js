@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 export const signupSchema = Joi.object({
   name: Joi.string()
@@ -27,21 +28,22 @@ export const signupSchema = Joi.object({
       "string.email": "Please enter a valid email address",
     }),
   phone: Joi.string()
-    .trim()
-    .required()
-    .min(9)
-    .max(15)
-    .pattern(
-      /^(\+92|92|0)?((3\d{2}[- ]?\d{7})|((2[1-9]|4[1-9]|5[1-9]|6[1-9]|7[1-9]|8[1-9]|9[1-9])[- ]?\d{7,8}))$/
-    )
-    .messages({
-      "string.empty": "Phone number is required",
-      "any.required": "Phone number is required",
-      "string.min": "Phone number is too short",
-      "string.max": "Phone number is too long",
-      "string.pattern.base":
-        "Enter a valid mobile or Landline number.",
-    }),
+  .trim()
+  .required()
+  .custom((value, helpers) => {
+    const phone = parsePhoneNumberFromString(value, "PK");
+
+    if (!phone || !phone.isValid()) {
+      return helpers.error("any.invalid");
+    }
+
+    return value;
+  })
+  .messages({
+    "string.empty": "Phone number is required",
+    "any.required": "Phone number is required",
+    "any.invalid": "Enter a valid Pakistani mobile or landline number.",
+  }),
   password: Joi.string()
     .required()
     .min(8)

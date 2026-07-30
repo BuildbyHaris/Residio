@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import Navbar from "../../landing/components/Navbar";
@@ -15,6 +16,7 @@ import {
 } from "../api/hostel.api";
 
 const OwnerDashboard = () => {
+  const navigate = useNavigate();
   const [hostels, setHostels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -24,6 +26,7 @@ const OwnerDashboard = () => {
   const [editingHostel, setEditingHostel] = useState(null);
   const [viewingHostel, setViewingHostel] = useState(null);
   const [hostelToDelete, setHostelToDelete] = useState(null); // Custom popup state
+  
 
   // ---------- Fetch owner's hostels ----------
   const fetchMyHostels = async () => {
@@ -76,17 +79,14 @@ const OwnerDashboard = () => {
     setIsFormOpen(false);
     setEditingHostel(null);
   };
-
   const handleAddProperty = () => {
-    setEditingHostel(null);
-    setIsFormOpen(true);
-  };
-
+  navigate("/owner-dashboard/add-property");
+};
   const handleEdit = (hostel) => {
     setEditingHostel(hostel);
     setIsFormOpen(true);
   };
-
+  
   // Modern Popup Trigger
   const handleDeleteClick = (hostelId) => {
     setHostelToDelete(hostelId);
@@ -95,7 +95,7 @@ const OwnerDashboard = () => {
   // Actual Async Delete Action
   const handleConfirmDelete = async () => {
     if (!hostelToDelete) return;
-    
+
     try {
       setIsDeleting(true);
       await deleteHostelApi(hostelToDelete);
@@ -142,27 +142,14 @@ const OwnerDashboard = () => {
 
           <OwnerStatsCards hostels={hostels} />
 
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-3">
-              My Properties
+          <div className="bg-white rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Dashboard Overview
             </h2>
 
-            {loading ? (
-              <p className="text-gray-400">Loading your hostels...</p>
-            ) : hostels.length === 0 ? (
-              <div className="bg-white border border-dashed border-gray-300 rounded-xl p-10 text-center text-gray-400">
-                No properties added yet. Click "Add New Property" to create
-                your first listing.
-              </div>
-            ) : (
-              <HostelTable
-                hostels={hostels}
-                onView={setViewingHostel}
-                onEdit={handleEdit}
-                onDelete={handleDeleteClick}
-                onToggleStatus={handleToggleStatus}
-              />
-            )}
+            <p className="text-gray-500 mt-2">
+              Manage your hostels, bookings and earnings from here.
+            </p>
           </div>
         </main>
       </div>
@@ -177,7 +164,7 @@ const OwnerDashboard = () => {
             <p className="text-gray-500 text-sm mb-6">
               Are you sure you want to delete this hostel? This action cannot be undone.
             </p>
-            
+
             <div className="flex items-center justify-end gap-3">
               <button
                 type="button"

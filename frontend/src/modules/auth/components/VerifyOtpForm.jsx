@@ -51,6 +51,15 @@ const VerifyOtpForm = () => {
 
   const inputs = useRef([]);
   const intervalRef = useRef(null); // single interval ref for cleanup
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user?.isVerified) {
+    navigate("/", { replace: true });
+  }
+}, [navigate]);
+
+
 
   // ─── Helper: calculate remaining seconds ─────────────────────────────────
   const getRemainingSeconds = () => {
@@ -147,12 +156,17 @@ const VerifyOtpForm = () => {
 
       // Clean up persisted expiry
       sessionStorage.removeItem(OTP_EXPIRES_KEY);
+sessionStorage.removeItem(EMAIL_KEY); 
 
       setTimeout(() => {
         if (isForgotPassword) {
-          navigate("/reset-password", { state: { email } });
+          navigate("/reset-password", {
+      replace: true,
+      state: { email },});
         } else {
-          navigate("/");
+          navigate("/",{
+      replace: true,
+    });
         }
       }, 1500);
     } catch(err) {

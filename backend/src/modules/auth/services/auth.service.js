@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import validator from "validator";
 import { env } from "../../../config/env.js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import {
   findUserByEmail,
@@ -46,9 +47,13 @@ export const registerUser = async (userData) => {
     throw new Error("Disposable email addresses are not allowed.");
   }
 
-  if (!/^03\d{9}$/.test(phone)) {
-    throw new Error("Phone number must be in the format 03XXXXXXXXX.");
-  }
+ const phoneNumber = parsePhoneNumberFromString(phone, "PK");
+
+if (!phoneNumber || !phoneNumber.isValid()) {
+  throw new Error(
+    "Please enter a valid Pakistani mobile or landline number."
+  );
+}
 
   // Check duplicate email
   const existingEmail = await findUserByEmail(normalizedEmail);
@@ -128,6 +133,8 @@ export const registerUser = async (userData) => {
 /**
  * Verify Email OTP
  */
+
+
 export const verifyOTP = async ({
   email,
   otp,
@@ -135,6 +142,17 @@ export const verifyOTP = async ({
 
   const normalizedEmail =
     email.trim().toLowerCase();
+
+
+  const existingUser = await findUserByEmail(normalizedEmail);
+
+  if (!existingUser) {
+    throw new Error("User not found.");
+  }
+
+  if (existingUser.isVerified) {
+    throw new Error("User is already verified.");
+  }
 
   const hashedOTP = hashOTP(otp);
 
@@ -183,26 +201,30 @@ export const resendOTP = async (email) => {
     throw new Error("User not found.");
   }
 
+  // if (user.isVerified) {
+  //   const OTP_COOLDOWN = 60 * 1000;
+
+  //   if (
+  //     user.lastOtpSentAt &&
+  //     Date.now() - user.lastOtpSentAt.getTime() <
+  //     OTP_COOLDOWN
+  //   ) {
+  //     const remainingSeconds = Math.ceil(
+  //       (OTP_COOLDOWN -
+  //         (Date.now() -
+  //           user.lastOtpSentAt.getTime())) /
+  //       1000
+  //     );
+
+  //     throw new Error(
+  //       `Please wait ${remainingSeconds} seconds before requesting another OTP.`
+  //     );
+  //   }
+  // }
   if (user.isVerified) {
-    const OTP_COOLDOWN = 60 * 1000;
-
-    if (
-      user.lastOtpSentAt &&
-      Date.now() - user.lastOtpSentAt.getTime() <
-      OTP_COOLDOWN
-    ) {
-      const remainingSeconds = Math.ceil(
-        (OTP_COOLDOWN -
-          (Date.now() -
-            user.lastOtpSentAt.getTime())) /
-        1000
-      );
-
-      throw new Error(
-        `Please wait ${remainingSeconds} seconds before requesting another OTP.`
-      );
-    }
+    throw new Error("User is already verified.");
   }
+
 
   const otp = generateOTP();
 

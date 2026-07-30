@@ -186,7 +186,7 @@ const RegisterForm = () => {
               value={formData.phone}
               onChange={handleChange}
               className={inputBase}
-              maxLength={11}
+              maxLength={13}
             />
           </div>
           {errors.phone && (

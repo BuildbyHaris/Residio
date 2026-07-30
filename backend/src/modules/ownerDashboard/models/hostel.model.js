@@ -100,11 +100,16 @@ const hostelSchema = new mongoose.Schema(
       type: [imageSchema],
       default: [],
     },
-
+    
     contactNumber: {
       type: String,
-      required: [true, "Contact number is required"],
-      match: [/^[0-9]{11}$/, "Enter a valid 11-digit contact number"],
+      required: true,
+      validate: {
+        validator: function(value) {
+          return /^(?:\+92|0)[0-9]{10,11}$/.test(value);
+        },
+        message: "Enter a valid Pakistan contact number"
+      }
     },
 
     totalBeds: {

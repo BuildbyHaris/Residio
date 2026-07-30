@@ -26,7 +26,12 @@ const emptyFormState = {
   ],
 };
 
-const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
+const HostelForm = ({
+  onSubmit,
+  onClose,
+  submitting,
+  initialData,
+}) => {
   const isEditMode = Boolean(initialData);
 
   const [formData, setFormData] = useState(emptyFormState);
@@ -76,10 +81,10 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
 
   const handleHostelImagesChange = (e) => {
     const files = Array.from(e.target.files);
-    if (files.length > 5) {
+    if (files.length > 10) {
       setErrors((prev) => ({
         ...prev,
-        hostelImages: "Maximum 5 images allowed",
+        hostelImages: "Maximum 10 images allowed",
       }));
       return;
     }
@@ -122,8 +127,9 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
     if (!formData.name.trim()) newErrors.name = "Hostel name is required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.city.trim()) newErrors.city = "City is required";
-    if (!/^[0-9]{11}$/.test(formData.contactNumber))
-      newErrors.contactNumber = "Enter a valid 11-digit contact number";
+    if (!/^(?:\+92|0)[0-9]{10,11}$/.test(formData.contactNumber)) {
+      newErrors.contactNumber = "Enter a valid Pakistan contact number";
+    }
     if (!formData.totalBeds || Number(formData.totalBeds) < 1)
       newErrors.totalBeds = "Total beds must be at least 1";
 
@@ -174,17 +180,20 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-800">
-            {isEditMode ? "Edit Hostel" : "Add Hostel"}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+        {/* Modal Header */}
+        <div className="flex justify-between items-center mb-4 pb-3 border-b">
+          <h2 className="text-xl font-bold text-gray-900">
+            {isEditMode ? "Edit Hostel" : "Add New Hostel"}
           </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+            className="text-gray-400 hover:text-gray-700 text-2xl leading-none"
+            aria-label="Close"
           >
-            ✕
+            &times;
           </button>
         </div>
 
@@ -198,7 +207,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="e.g. Green Valley Hostel"
             />
             {errors.name && (
@@ -215,7 +224,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
               value={formData.description}
               onChange={handleChange}
               rows={3}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Short description about the hostel"
             />
           </div>
@@ -230,7 +239,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.address && (
                 <p className="text-red-500 text-xs mt-1">{errors.address}</p>
@@ -245,7 +254,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.city && (
                 <p className="text-red-500 text-xs mt-1">{errors.city}</p>
@@ -262,7 +271,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                 name="genderPreference"
                 value={formData.genderPreference}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <option value="Boys">Boys</option>
                 <option value="Girls">Girls</option>
@@ -279,7 +288,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                 value={formData.totalBeds}
                 onChange={handleChange}
                 min="1"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.totalBeds && (
                 <p className="text-red-500 text-xs mt-1">
@@ -298,9 +307,9 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
               name="contactNumber"
               value={formData.contactNumber}
               onChange={handleChange}
-              placeholder="03001234567"
-              maxLength={11}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="+923001234567"
+              maxLength={13}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
             {errors.contactNumber && (
               <p className="text-red-500 text-xs mt-1">
@@ -311,35 +320,35 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Hostel Photos (max 5) {isEditMode && "— leave empty to keep existing"}
+              Hostel Photos (max 10) {isEditMode && "— leave empty to keep existing"}
             </label>
             <input
               type="file"
               accept="image/*"
               multiple
               onChange={handleHostelImagesChange}
-              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2"
+              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 file:bg-orange-50 file:text-orange-600 file:border-0 file:px-3 file:py-2 file:rounded-md hover:file:bg-orange-100"
             />
             {hostelImages.length > 0 && (
-  <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-    {hostelImages.map((file, index) => (
-      <div
-        key={index}
-        className="relative border rounded-lg overflow-hidden"
-      >
-        <img
-          src={URL.createObjectURL(file)}
-          alt={`Preview ${index + 1}`}
-          className="h-24 w-full object-cover"
-        />
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {hostelImages.map((file, index) => (
+                  <div
+                    key={index}
+                    className="relative border rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${index + 1}`}
+                      className="h-24 w-full object-cover"
+                    />
 
-        <p className="text-[10px] p-1 truncate">
-          {file.name}
-        </p>
-      </div>
-    ))}
-  </div>
-)}
+                    <p className="text-[10px] p-1 truncate">
+                      {file.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
             {errors.hostelImages && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.hostelImages}
@@ -363,7 +372,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                       onChange={(e) =>
                         handleRoomTypeChange(index, "type", e.target.value)
                       }
-                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm"
+                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                     >
                       {ROOM_TYPE_OPTIONS.map((opt) => (
                         <option key={opt} value={opt}>
@@ -379,7 +388,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                       onChange={(e) =>
                         handleRoomTypeChange(index, "price", e.target.value)
                       }
-                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-24"
+                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-24 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
 
                     <input
@@ -393,7 +402,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                           e.target.value
                         )
                       }
-                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-32"
+                      className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
 
                     {formData.roomTypes.length > 1 && (
@@ -421,7 +430,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                       onChange={(e) =>
                         handleRoomImageChange(index, e.target.files[0])
                       }
-                      className="text-xs w-full"
+                      className="text-xs w-full file:bg-orange-50 file:text-orange-600 file:border-0 file:px-3 file:py-2 file:rounded-md hover:file:bg-orange-100"
                     />
                     {rt.imageFile && (
                       <p className="text-xs text-gray-500 mt-1">
@@ -447,7 +456,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
             <button
               type="button"
               onClick={addRoomTypeRow}
-              className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+              className="mt-2 text-sm text-orange-600 hover:text-orange-700"
             >
               + Add Another Room Type
             </button>
@@ -467,7 +476,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                     type="checkbox"
                     checked={formData.amenities.includes(amenity)}
                     onChange={() => toggleAmenity(amenity)}
-                    className="rounded"
+                    className="rounded text-orange-500 focus:ring-orange-500"
                   />
                   {amenity}
                 </label>
@@ -479,15 +488,14 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
             <button
               type="button"
               onClick={onClose}
-              disabled={submitting}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 disabled:opacity-50"
+              className="text-gray-600 hover:text-gray-800 text-sm font-medium px-5 py-2 rounded-lg transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? "Saving..." : isEditMode ? "Update Hostel" : "Save Hostel"}
             </button>
