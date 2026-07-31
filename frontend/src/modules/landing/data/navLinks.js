@@ -5,7 +5,7 @@ export const navLinks = [
   },
   {
     label: "Find Hostels",
-    href: "/find-hostels",
+    href: "/find-hostel",
   },
   {
     label: "PGs",
@@ -23,4 +23,5 @@ export const navLinks = [
     label: "Contact",
     href: "/contact",
   },
+  
 ];

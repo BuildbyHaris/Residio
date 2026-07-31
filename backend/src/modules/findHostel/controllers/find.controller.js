@@ -1,4 +1,4 @@
-import { searchHostels, getHostelById } from "../services/hostel.service.js";
+import { searchHostels, getHostelById } from "../services/find.service.js";
 
 export const getHostels = async (req, res, next) => {
   try {

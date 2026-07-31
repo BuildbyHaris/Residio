@@ -1,10 +1,5 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ROUTES } from "./paths.js";
 // Landing
 import LandingPage from "../modules/landing/pages/Landing";
 import FindHostels from "../modules/landing/pages/FindHostels";
@@ -38,78 +33,41 @@ import OwnerVerificationDetailsPage from "../modules/admin/pages/OwnerVerificati
 import ProtectedRoute from "./ProtectedRoute";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 
+import FindHostelPage from "../modules/findHostel/pages/FindHostelPage.jsx";
+import HostelDetailPage from "../modules/findHostel/pages/HostelDetailPage.jsx";
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Landing */}
-        <Route
-          path="/"
-          element={<LandingPage />}
-        />
-        <Route
-          path="/find-hostels"
-          element={<FindHostels />}
-        />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/find-hostels" element={<FindHostels />} />
 
-        <Route
-          path="/pgs"
-          element={<PGs />}
-        />
+        <Route path="/pgs" element={<PGs />} />
 
-        <Route
-          path="/how-it-works"
-          element={<HowItWorks />}
-        />
+        <Route path="/how-it-works" element={<HowItWorks />} />
 
-        <Route
-          path="/about"
-          element={<About />}
-        />
+        <Route path="/about" element={<About />} />
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
+        <Route path="/contact" element={<Contact />} />
 
         {/* Auth */}
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/register" element={<Register />} />
 
-        <Route
-          path="/verify-otp"
-          element={<VerifyOtp />}
-        />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/forgot-password"
-          element={<ForgotPassword />}
-        />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        <Route
-          path="/verify-reset-otp"
-          element={<VerifyResetOtp />}
-        />
+        <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
 
-        <Route
-          path="/reset-password"
-          element={<ResetPassword />}
-        />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* User Protected */}
         <Route element={<ProtectedRoute />}>
-          <Route
-            path="/profile"
-            element={<ProfilePage />}
-          />
+          <Route path="/profile" element={<ProfilePage />} />
 
           <Route
             path="/owner-verification"
@@ -117,30 +75,25 @@ const AppRoutes = () => {
           />
         </Route>
 
+        {/* ye ma ny add kye hee */}
+
+        <Route element={<ProtectedRoute />}>
+          <Route path={ROUTES.FIND_HOSTEL} element={<FindHostelPage />} />
+        </Route>
+
+        <Route path="/hostel/:id" element={<HostelDetailPage />} />
+
         {/* Owner Dashboard */}
-        <Route
-          element={
-            <ProtectedRoute allowedRole="owner" />
-          }
-        >
-          <Route
-            path="/owner-dashboard"
-            element={<OwnerDashboard />}
-          />
+        <Route element={<ProtectedRoute allowedRole="owner" />}>
+          <Route path="/owner-dashboard" element={<OwnerDashboard />} />
         </Route>
 
         {/* Admin Login */}
-        <Route
-          path="/admin/login"
-          element={<AdminLogin />}
-        />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* Admin Protected */}
         <Route element={<AdminProtectedRoute />}>
-          <Route
-            path="/admin/dashboard"
-            element={<AdminDashboard />}
-          />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           <Route
             path="/admin/owner-verifications"
@@ -149,23 +102,12 @@ const AppRoutes = () => {
 
           <Route
             path="/admin/owner-verifications/:verificationId"
-            element={
-              <OwnerVerificationDetailsPage />
-            }
+            element={<OwnerVerificationDetailsPage />}
           />
         </Route>
 
         {/* 404 */}
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to="/"
-              replace
-            />
-          }
-        />
-
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

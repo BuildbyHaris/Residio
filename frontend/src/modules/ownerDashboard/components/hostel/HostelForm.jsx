@@ -22,7 +22,13 @@ const emptyFormState = {
   totalBeds: "",
   amenities: [],
   roomTypes: [
-    { type: "Single", price: "", availableBeds: "", imageFile: null, existingImage: null },
+    {
+      type: "Single",
+      price: "",
+      availableBeds: "",
+      imageFile: null,
+      existingImage: null,
+    },
   ],
 };
 
@@ -104,7 +110,13 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
       ...prev,
       roomTypes: [
         ...prev.roomTypes,
-        { type: "Single", price: "", availableBeds: "", imageFile: null, existingImage: null },
+        {
+          type: "Single",
+          price: "",
+          availableBeds: "",
+          imageFile: null,
+          existingImage: null,
+        },
       ],
     }));
   };
@@ -282,9 +294,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.totalBeds && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.totalBeds}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.totalBeds}</p>
               )}
             </div>
           </div>
@@ -311,7 +321,8 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Hostel Photos (max 5) {isEditMode && "— leave empty to keep existing"}
+              Hostel Photos (max 5){" "}
+              {isEditMode && "— leave empty to keep existing"}
             </label>
             <input
               type="file"
@@ -321,29 +332,25 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2"
             />
             {hostelImages.length > 0 && (
-  <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-    {hostelImages.map((file, index) => (
-      <div
-        key={index}
-        className="relative border rounded-lg overflow-hidden"
-      >
-        <img
-          src={URL.createObjectURL(file)}
-          alt={`Preview ${index + 1}`}
-          className="h-24 w-full object-cover"
-        />
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {hostelImages.map((file, index) => (
+                  <div
+                    key={index}
+                    className="relative border rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${index + 1}`}
+                      className="h-24 w-full object-cover"
+                    />
 
-        <p className="text-[10px] p-1 truncate">
-          {file.name}
-        </p>
-      </div>
-    ))}
-  </div>
-)}
+                    <p className="text-[10px] p-1 truncate">{file.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
             {errors.hostelImages && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.hostelImages}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.hostelImages}</p>
             )}
           </div>
 
@@ -390,7 +397,7 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
                         handleRoomTypeChange(
                           index,
                           "availableBeds",
-                          e.target.value
+                          e.target.value,
                         )
                       }
                       className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-32"
@@ -489,7 +496,11 @@ const HostelForm = ({ onClose, onSubmit, submitting, initialData }) => {
               disabled={submitting}
               className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? "Saving..." : isEditMode ? "Update Hostel" : "Save Hostel"}
+              {submitting
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Hostel"
+                  : "Save Hostel"}
             </button>
           </div>
         </form>

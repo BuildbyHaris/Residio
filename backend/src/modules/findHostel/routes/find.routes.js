@@ -1,11 +1,11 @@
 import express from "express";
-import { getHostels, getHostelDetail } from "../controllers/hostel.controller.js";
+import { getHostels, getHostelDetail } from "../controllers/find.controller.js";
 import {
   validateSearchQuery,
   validateHostelId,
   handleValidationErrors,
-} from "../validations/hostel.validation.js";
-import { sanitizeSearchQuery, rateLimiter } from "../middlewares/hostel.middleware.js";
+} from "../validations/find.validation.js";
+import { sanitizeSearchQuery, rateLimiter } from "../middlewares/find.middleware.js";
 
 const router = express.Router();
 
