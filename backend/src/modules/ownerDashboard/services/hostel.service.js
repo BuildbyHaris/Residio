@@ -7,6 +7,7 @@ import {
   findActiveHostels,
   saveHostel,
   removeHostel,
+
 } from "../repositories/hostel.repository.js";
 
 // ---------- Helpers ----------
@@ -188,4 +189,16 @@ export const getAllActiveHostelsService = (query) => {
   if (genderPreference) filter.genderPreference = genderPreference;
 
   return findActiveHostels(filter);
+};
+// ---------- Get Hostel By ID (public) ----------
+export const getHostelByIdService = async (hostelId) => {
+  const hostel = await findHostelById(hostelId);
+
+  if (!hostel) {
+    const err = new Error("Hostel not found");
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return hostel;
 };

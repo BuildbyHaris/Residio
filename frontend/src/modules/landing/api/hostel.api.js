@@ -7,3 +7,6 @@ const hostelPublicApi = axios.create({
 export const getAllActiveHostelsApi = (params = {}) => {
   return hostelPublicApi.get("/", { params });
 };
+export const getHostelByIdApi = (id) => {
+  return hostelPublicApi.get(`/${id}`);
+};

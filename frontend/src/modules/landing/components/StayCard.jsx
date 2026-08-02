@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Wifi, Bike, Utensils, AirVent, Heart, Shield, Zap, Droplet, Car } from 'lucide-react';
 import Badge from './Badge';
 import RatingStars from './RatingStars';
@@ -16,9 +17,13 @@ var amenityIconMap = {
   bike: Bike,
 };
 
-function StayCard({ image, title, location, amenities, rating, reviewCount, priceLabel }) {
+function StayCard({ id, image, title, location, amenities, rating, reviewCount, priceLabel }) {
+  const navigate = useNavigate();
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-border-light overflow-hidden">
+    <div
+      className="bg-white rounded-2xl shadow-md border border-border-light overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
+      onClick={() => navigate(`/hostels/${id}`)}
+    >
       {/* Image */}
       <div className="relative aspect-[4/3]">
         <img
@@ -63,8 +68,11 @@ function StayCard({ image, title, location, amenities, rating, reviewCount, pric
         </p>
 
         {/* Book Button */}
-        <Button variant="primary" className="w-full mt-3 text-sm py-2">
-          Call Now
+        <Button variant="primary" className="w-full mt-3 text-sm py-2"
+          onClick={(e)=>{e.stopPropagation();
+          }}
+          >
+          Chat Now
         </Button>
       </div>
     </div>

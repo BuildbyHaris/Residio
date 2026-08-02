@@ -11,12 +11,12 @@ export const findHostelsByOwner = (ownerId) => {
 };
 
 export const findHostelById = (id) => {
-  return Hostel.findById(id);
+  return Hostel.findById(id).populate("owner", "name email phone profileImage isVerified");
 };
 
 export const findActiveHostels = (filter) => {
   return Hostel.find(filter)
-    .populate("owner", "name email phone")
+    .populate("owner", "name email phone profileImage isVerified")
     .sort({ createdAt: -1 });
 };
 

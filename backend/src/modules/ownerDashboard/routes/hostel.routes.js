@@ -5,6 +5,7 @@ import {
   updateHostel,
   deleteHostel,
   getAllActiveHostels,
+  getHostelById,
 } from "../controllers/hostel.controller.js";
 import { protect, authorizeOwner } from "../middleware/auth.middleware.js";
 import upload from "../middleware/upload.middleware.js";
@@ -12,7 +13,6 @@ import upload from "../middleware/upload.middleware.js";
 const router = express.Router();
 
 // Public route — User Dashboard listing
-router.get("/", getAllActiveHostels);
 
 router.post(
   "/",
@@ -24,9 +24,9 @@ router.post(
   ]),
   createHostel
 );
-
+router.get("/", getAllActiveHostels);
 router.get("/my-hostels", protect, authorizeOwner, getMyHostels);
-
+router.get("/:id", getHostelById);
 router.put(
   "/:id",
   protect,

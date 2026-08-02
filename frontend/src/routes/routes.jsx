@@ -12,6 +12,7 @@ import PGs from "../modules/landing/pages/PGs";
 import HowItWorks from "../modules/landing/pages/HowItWorks";
 import About from "../modules/landing/pages/About";
 import Contact from "../modules/landing/pages/Contact";
+import HostelDetails from "../modules/landing/pages/HostelDetails";
 
 // Auth
 import Register from "../modules/auth/pages/Register";
@@ -54,6 +55,11 @@ const AppRoutes = () => {
         <Route
           path="/find-hostels"
           element={<FindHostels />}
+        />
+
+        <Route
+          path="/hostels/:hostelId"
+          element={<HostelDetails />}
         />
 
         <Route

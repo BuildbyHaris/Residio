@@ -4,6 +4,7 @@ import {
   updateHostelService,
   deleteHostelService,
   getAllActiveHostelsService,
+  getHostelByIdService,
 } from "../services/hostel.service.js";
 
 // Common error responder — statusCode agar service ne set kiya hai to wahi use hoga
@@ -91,5 +92,24 @@ export const getAllActiveHostels = async (req, res) => {
     });
   } catch (error) {
     return handleError(res, error, "Server error while fetching hostels");
+  }
+};
+// @desc    Get hostel details by ID
+// @route   GET /api/v1/hostels/:id
+// @access  Public
+export const getHostelById = async (req, res) => {
+  try {
+    const hostel = await getHostelByIdService(req.params.id);
+
+    return res.status(200).json({
+      success: true,
+      data: hostel,
+    });
+  } catch (error) {
+    return handleError(
+      res,
+      error,
+      "Server error while fetching hostel details"
+    );
   }
 };
