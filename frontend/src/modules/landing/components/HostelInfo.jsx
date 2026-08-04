@@ -4,8 +4,8 @@ import {
   Share2,
   Bed,
   LayoutGrid,
-  Phone,
   Wallet,
+  User,
 } from "lucide-react";
 import Badge from "./Badge";
 import RatingStars from "./RatingStars";
@@ -116,13 +116,9 @@ const HostelInfo = ({ hostel }) => {
         />
 
         <StatItem
-          icon={Phone}
-          value={
-            hostel.contactNumber
-              ? hostel.contactNumber
-              : "Contact after booking"
-          }
-          label="Contact"
+          icon={User}
+          value={hostel.owner?.name || "Unknown Owner"}
+          label="Owner"
         />
       </div>
     </div>
