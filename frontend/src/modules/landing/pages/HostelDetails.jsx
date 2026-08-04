@@ -16,134 +16,142 @@ import ReviewsSection from "../components/ReviewsSection";
 import StickySidebar from "../components/StickySidebar";
 
 export default function HostelDetails() {
-  const { hostelId } = useParams();
-  const { user: currentUser } = useAuth();
+const { id } = useParams();
+const { user: currentUser } = useAuth();
 
-  const [selectedRoomType, setSelectedRoomType] = useState("");
-  const [hostel, setHostel] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const [selectedRoomType, setSelectedRoomType] = useState("");
+const [hostel, setHostel] = useState(null);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
-  useEffect(() => {
-    let isMounted = true;
+useEffect(() => {
+let isMounted = true;
 
-    setSelectedRoomType("");
 
-    const fetchHostel = async () => {
-      setLoading(true);
-      setError(null);
+setSelectedRoomType("");
 
-      try {
-        const res = await getHostelByIdApi(hostelId);
+const fetchHostel = async () => {
+  setLoading(true);
+  setError(null);
 
-        if (isMounted) {
-          setHostel(res.data.data);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(
-            err.response?.data?.message || "Failed to load hostel details"
-          );
+  try {
+    const res = await getHostelByIdApi(id);
 
-          // Temporary fallback
-          setHostel(hostelDetailsDummy);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    if (hostelId) {
-      fetchHostel();
+    if (isMounted) {
+      setHostel(res.data.data);
     }
+  } catch (err) {
+    if (isMounted) {
+      setError(
+        err.response?.data?.message || "Failed to load hostel details"
+      );
 
-    return () => {
-      isMounted = false;
-    };
-  }, [hostelId]);
-
-  console.log("Hostel ID:", hostelId);
-  console.log("Hostel:", hostel);
-
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-
-        <main className="max-w-7xl mx-auto px-4 pt-28 pb-8">
-          <div className="h-64 rounded-xl bg-brand-peachLight animate-pulse" />
-        </main>
-      </>
-    );
+      // Temporary fallback
+      setHostel(hostelDetailsDummy);
+    }
+  } finally {
+    if (isMounted) {
+      setLoading(false);
+    }
   }
+};
 
-  if (!hostel) {
-    return (
-      <>
-        <Navbar />
+if (id) {
+  fetchHostel();
+}
 
-        <main className="max-w-7xl mx-auto px-4 pt-28 pb-16 text-center text-ink-500">
-          {error || "Hostel not found."}
-        </main>
-      </>
-    );
-  }
+return () => {
+  isMounted = false;
+};
 
-  return (
-    <>
-      <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 pt-6 pb-16">
-        {/* Breadcrumb */}
-        <nav className="text-sm text-ink-500 mb-4">
-          Home &gt; Hostels in {hostel.city} &gt; {hostel.name}
-        </nav>
+}, [id]);
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Side */}
-          <div className="lg:col-span-2 space-y-8">
-            <HostelGallery
-              images={hostel.images?.map((img) => img.url)}
-              hostelName={hostel.name}
-              verified={hostel.verified}
-              totalPhotosCount={hostel.totalPhotosCount}
-            />
+console.log("Hostel ID:", id);
+console.log("Hostel:", hostel);
 
-            <HostelInfo hostel={hostel} />
+if (loading) {
+return (
+<> <Navbar />
 
-            <AmenitiesSection amenities={hostel.amenities} />
 
-            <RoomTypesTable
-              roomTypes={hostel.roomTypes}
-              selectedRoomType={selectedRoomType}
-              onSelect={(room) => setSelectedRoomType(room.type)}
-            />
+    <main className="max-w-7xl mx-auto px-4 pt-28 pb-8">
+      <div className="h-64 rounded-xl bg-brand-peachLight animate-pulse" />
+    </main>
+  </>
+);
 
-            <AboutHostel description={hostel.description} />
 
-            <HouseRulesAndLocation
-              houseRules={hostel.houseRules}
-              nearby={hostel.nearby}
-            />
+}
 
-            <ReviewsSection reviews={hostel.reviews} />
-          </div>
+if (!hostel) {
+return (
+<> <Navbar />
 
-          {/* Right Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            <StickySidebar
-              hostel={hostel}
-              currentUser={currentUser}
-              selectedRoomType={selectedRoomType}
-              setSelectedRoomType={setSelectedRoomType}
-            />
-            <OwnerCard owner={hostel.owner} />
-          </div>
-          
-        </div>
-      </main>
-    </>
-  );
+    <main className="max-w-7xl mx-auto px-4 pt-28 pb-16 text-center text-ink-500">
+      {error || "Hostel not found."}
+    </main>
+  </>
+);
+
+
+}
+
+return (
+<> <Navbar />
+
+
+  <main className="max-w-7xl mx-auto px-4 pt-6 pb-16">
+    {/* Breadcrumb */}
+    <nav className="text-sm text-ink-500 mb-4">
+      Home &gt; Hostels in {hostel.city} &gt; {hostel.name}
+    </nav>
+
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Left Side */}
+      <div className="lg:col-span-2 space-y-8">
+        <HostelGallery
+          images={hostel.images?.map((img) => img.url)}
+          hostelName={hostel.name}
+          verified={hostel.verified}
+          totalPhotosCount={hostel.totalPhotosCount}
+        />
+
+        <HostelInfo hostel={hostel} />
+
+        <AmenitiesSection amenities={hostel.amenities} />
+
+        <RoomTypesTable
+          roomTypes={hostel.roomTypes}
+          selectedRoomType={selectedRoomType}
+          onSelect={(room) => setSelectedRoomType(room.type)}
+        />
+
+        <AboutHostel description={hostel.description} />
+
+        <HouseRulesAndLocation
+          houseRules={hostel.houseRules}
+          nearby={hostel.nearby}
+        />
+
+        <ReviewsSection reviews={hostel.reviews} />
+      </div>
+
+      {/* Right Sidebar */}
+      <div className="lg:col-span-1 space-y-6">
+        <StickySidebar
+          hostel={hostel}
+          currentUser={currentUser}
+          selectedRoomType={selectedRoomType}
+          setSelectedRoomType={setSelectedRoomType}
+        />
+
+        <OwnerCard owner={hostel.owner} />
+      </div>
+      
+    </div>
+  </main>
+</>
+
+);
 }

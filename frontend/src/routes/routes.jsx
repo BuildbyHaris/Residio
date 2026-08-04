@@ -1,18 +1,31 @@
-// src/routes/AppRoutes.jsx
+  
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "./paths.js";
 
-// Landing
+// ============================================================
+// LANDING
+// ============================================================
+
 import LandingPage from "../modules/landing/pages/Landing";
 import FindHostels from "../modules/landing/pages/FindHostels";
 import PGs from "../modules/landing/pages/PGs";
 import HowItWorks from "../modules/landing/pages/HowItWorks";
 import About from "../modules/landing/pages/About";
 import Contact from "../modules/landing/pages/Contact";
+
+// New Hostel Details page from Fida
 import HostelDetails from "../modules/landing/pages/HostelDetails";
 
-// Auth
+// ============================================================
+// AUTH
+// ============================================================
+
 import Register from "../modules/auth/pages/Register";
 import VerifyOtp from "../modules/auth/pages/VerifyOtp";
 import Login from "../modules/auth/pages/Login";
@@ -20,28 +33,47 @@ import ForgotPassword from "../modules/auth/pages/ForgotPassword";
 import VerifyResetOtp from "../modules/auth/pages/VerifyResetOtp";
 import ResetPassword from "../modules/auth/pages/ResetPassword";
 
-// User
+// ============================================================
+// USER
+// ============================================================
+
 import ProfilePage from "../modules/profile/pages/ProfilePage";
 
-// Owner
+// ============================================================
+// OWNER
+// ============================================================
+
 import OwnerDashboard from "../modules/ownerDashboard/pages/ownerDashboard";
 import OwnerVerificationPage from "../modules/ownerVerification/pages/OwnerVerificationPage";
 import MyProperties from "../modules/ownerDashboard/pages/MyProperties";
 import AddProperty from "../modules/ownerDashboard/pages/AddProperty";
 
-// Admin
+// ============================================================
+// ADMIN
+// ============================================================
+
 import AdminLogin from "../modules/admin/pages/AdminLogin";
 import AdminDashboard from "../modules/admin/pages/AdminDashboard";
 import OwnerVerifications from "../modules/admin/pages/OwnerVerifications";
 import OwnerVerificationDetailsPage from "../modules/admin/pages/OwnerVerificationDetails";
 
-// Guards
+// ============================================================
+// GUARDS
+// ============================================================
+
 import ProtectedRoute from "./ProtectedRoute";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 
-// Find Hostel
+// ============================================================
+// FIND HOSTEL
+// ============================================================
+
 import FindHostelPage from "../modules/findHostel/pages/FindHostelPage.jsx";
-import HostelDetailPage from "../modules/findHostel/pages/HostelDetailPage.jsx";
+
+// ============================================================
+// CHAT
+// ============================================================
+
 import ChatPage from "../modules/chat/pages/ChatPage.jsx";
 
 const AppRoutes = () => {
@@ -53,24 +85,70 @@ const AppRoutes = () => {
             PUBLIC / LANDING
         ===================================================== */}
 
-        <Route path={ROUTES.HOME} element={<LandingPage />} />
-        <Route path="/find-hostels" element={<FindHostels />} />
-        <Route path="/pgs" element={<PGs />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route
+          path={ROUTES.HOME}
+          element={<LandingPage />}
+        />
+
+        <Route
+          path="/find-hostels"
+          element={<FindHostels />}
+        />
+
+        <Route
+          path="/pgs"
+          element={<PGs />}
+        />
+
+        <Route
+          path="/how-it-works"
+          element={<HowItWorks />}
+        />
+
+        <Route
+          path="/about"
+          element={<About />}
+        />
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
 
 
         {/* =====================================================
             AUTH
         ===================================================== */}
 
-        <Route path={ROUTES.REGISTER} element={<Register />} />
-        <Route path={ROUTES.VERIFY_OTP} element={<VerifyOtp />} />
-        <Route path={ROUTES.LOGIN} element={<Login />} />
-        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-        <Route path={ROUTES.VERIFY_RESET_OTP} element={<VerifyResetOtp />} />
-        <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />
+        <Route
+          path={ROUTES.REGISTER}
+          element={<Register />}
+        />
+
+        <Route
+          path={ROUTES.VERIFY_OTP}
+          element={<VerifyOtp />}
+        />
+
+        <Route
+          path={ROUTES.LOGIN}
+          element={<Login />}
+        />
+
+        <Route
+          path={ROUTES.FORGOT_PASSWORD}
+          element={<ForgotPassword />}
+        />
+
+        <Route
+          path={ROUTES.VERIFY_RESET_OTP}
+          element={<VerifyResetOtp />}
+        />
+
+        <Route
+          path={ROUTES.RESET_PASSWORD}
+          element={<ResetPassword />}
+        />
 
 
         {/* =====================================================
@@ -79,19 +157,28 @@ const AppRoutes = () => {
 
         <Route element={<ProtectedRoute />}>
 
+          {/* Profile */}
           <Route
             path={ROUTES.PROFILE}
             element={<ProfilePage />}
           />
 
+          {/* Owner Verification */}
           <Route
             path={ROUTES.OWNER_VERIFICATION}
             element={<OwnerVerificationPage />}
           />
 
+          {/* Find Hostels */}
           <Route
             path={ROUTES.FIND_HOSTEL}
             element={<FindHostelPage />}
+          />
+
+          {/* Chat */}
+          <Route
+            path={ROUTES.CHAT}
+            element={<ChatPage />}
           />
 
         </Route>
@@ -99,11 +186,12 @@ const AppRoutes = () => {
 
         {/* =====================================================
             HOSTEL DETAILS
+            Fida's new HostelDetails page
         ===================================================== */}
 
         <Route
           path={ROUTES.HOSTEL_DETAIL}
-          element={<HostelDetailPage />}
+          element={<HostelDetails />}
         />
 
 
@@ -111,9 +199,13 @@ const AppRoutes = () => {
             OWNER DASHBOARD
         ===================================================== */}
 
-        <Route element={<ProtectedRoute allowedRole="owner" />}>
+        <Route
+          element={
+            <ProtectedRoute allowedRole="owner" />
+          }
+        >
 
-          {/* Dashboard */}
+          {/* Owner Dashboard */}
           <Route
             path={ROUTES.OWNER_DASHBOARD}
             element={<OwnerDashboard />}
@@ -148,45 +240,28 @@ const AppRoutes = () => {
             ADMIN PROTECTED ROUTES
         ===================================================== */}
 
-        <Route element={<AdminProtectedRoute />}>
+        <Route
+          element={<AdminProtectedRoute />}
+        >
 
+          {/* Admin Dashboard */}
           <Route
             path="/admin/dashboard"
             element={<AdminDashboard />}
           />
 
+          {/* Owner Verifications */}
           <Route
             path="/admin/owner-verifications"
             element={<OwnerVerifications />}
           />
 
+          {/* Owner Verification Details */}
           <Route
             path="/admin/owner-verifications/:verificationId"
-            element={<OwnerVerificationDetailsPage />}
-          />
-
-        </Route>
-
-        <Route element={<ProtectedRoute />}>
-
-          <Route
-            path={ROUTES.PROFILE}
-            element={<ProfilePage />}
-          />
-
-          <Route
-            path={ROUTES.OWNER_VERIFICATION}
-            element={<OwnerVerificationPage />}
-          />
-
-          <Route
-            path={ROUTES.FIND_HOSTEL}
-            element={<FindHostelPage />}
-          />
-
-          <Route
-            path={ROUTES.CHAT}
-            element={<ChatPage />}
+            element={
+              <OwnerVerificationDetailsPage />
+            }
           />
 
         </Route>
@@ -198,7 +273,12 @@ const AppRoutes = () => {
 
         <Route
           path="*"
-          element={<Navigate to={ROUTES.HOME} replace />}
+          element={
+            <Navigate
+              to={ROUTES.HOME}
+              replace
+            />
+          }
         />
 
       </Routes>
@@ -207,3 +287,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+
