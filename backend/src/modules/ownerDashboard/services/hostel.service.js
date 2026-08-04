@@ -94,7 +94,7 @@ export const updateHostelService = async (hostelId, ownerId, body, files) => {
     throw err;
   }
 
-  if (hostel.owner.toString() !== ownerId.toString()) {
+  if (hostel.owner._id.toString() !== ownerId.toString()) {
     const err = new Error("You are not authorized to edit this hostel");
     err.statusCode = 403;
     throw err;
@@ -161,7 +161,7 @@ export const deleteHostelService = async (hostelId, ownerId) => {
     throw err;
   }
 
-  if (hostel.owner.toString() !== ownerId.toString()) {
+  if (hostel.owner._id.toString() !== ownerId.toString()) {
     const err = new Error("You are not authorized to delete this hostel");
     err.statusCode = 403;
     throw err;

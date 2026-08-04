@@ -5,6 +5,7 @@ import { getHostelByIdApi } from "../api/hostel.api";
 import { hostelDetailsDummy } from "../data/hostelDetailsDummy";
 import { useAuth } from "../../../hooks/useAuth";
 
+import OwnerCard from "../components/OwnerCard";
 import HostelGallery from "../components/HostelGallery";
 import HostelInfo from "../components/HostelInfo";
 import AmenitiesSection from "../components/AmenitiesSection";
@@ -131,14 +132,16 @@ export default function HostelDetails() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <StickySidebar
               hostel={hostel}
               currentUser={currentUser}
               selectedRoomType={selectedRoomType}
               setSelectedRoomType={setSelectedRoomType}
             />
+            <OwnerCard owner={hostel.owner} />
           </div>
+          
         </div>
       </main>
     </>

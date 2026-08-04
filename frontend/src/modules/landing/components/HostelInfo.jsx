@@ -93,7 +93,6 @@ const HostelInfo = ({ hostel }) => {
           </button>
         </div>
       </div>
-
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 bg-brand-peachLight rounded-xl2 p-5">
         <StatItem

@@ -64,7 +64,7 @@ const RoomTypesTable = ({
             </div>
             <div className="sm:col-span-3 text-sm text-ink-500">
               {ROOM_TYPE_DESCRIPTION[room.type] ||
-  "Comfortable room with essential amenities."}
+               "Comfortable room with essential amenities."}
             </div>
             <div className="sm:col-span-2 font-semibold text-ink-900">
               Rs. {room.price.toLocaleString()}
