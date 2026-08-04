@@ -7,6 +7,7 @@ import {
   findActiveHostels,
   saveHostel,
   removeHostel,
+
 } from "../repositories/hostel.repository.js";
 
 // ---------- Helpers ----------
@@ -93,7 +94,7 @@ export const updateHostelService = async (hostelId, ownerId, body, files) => {
     throw err;
   }
 
-  if (hostel.owner.toString() !== ownerId.toString()) {
+  if (hostel.owner._id.toString() !== ownerId.toString()) {
     const err = new Error("You are not authorized to edit this hostel");
     err.statusCode = 403;
     throw err;
@@ -160,7 +161,7 @@ export const deleteHostelService = async (hostelId, ownerId) => {
     throw err;
   }
 
-  if (hostel.owner.toString() !== ownerId.toString()) {
+  if (hostel.owner._id.toString() !== ownerId.toString()) {
     const err = new Error("You are not authorized to delete this hostel");
     err.statusCode = 403;
     throw err;
@@ -188,4 +189,16 @@ export const getAllActiveHostelsService = (query) => {
   if (genderPreference) filter.genderPreference = genderPreference;
 
   return findActiveHostels(filter);
+};
+// ---------- Get Hostel By ID (public) ----------
+export const getHostelByIdService = async (hostelId) => {
+  const hostel = await findHostelById(hostelId);
+
+  if (!hostel) {
+    const err = new Error("Hostel not found");
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return hostel;
 };

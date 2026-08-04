@@ -52,6 +52,7 @@ function PopularStays() {
             return (
               <StayCard
                 key={stay.id}
+                id={stay.id}
                 image={stay.image}
                 title={stay.title}
                 location={stay.location}
