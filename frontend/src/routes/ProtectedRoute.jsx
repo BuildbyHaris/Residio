@@ -8,6 +8,12 @@ const ProtectedRoute = ({ allowedRole }) => {
     user,
   } = useAuth();
 
+    console.log("ProtectedRoute Render", {
+    loading,
+    isAuthenticated,
+    user,
+  });
+
   console.log("isAuthenticated:", isAuthenticated);
 
   if (loading) {

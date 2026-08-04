@@ -12,7 +12,8 @@ function PopularStays() {
     const fetchHostels = async () => {
       try {
         const res = await getAllActiveHostelsApi();
-        const mapped = res.data.data.map(mapHostelToStayCard);
+        const hostels = res.data.data.hostels || [];
+        const mapped = hostels.map(mapHostelToStayCard);
         setStays(mapped);
       } catch (error) {
         console.error("Failed to load hostels:", error);

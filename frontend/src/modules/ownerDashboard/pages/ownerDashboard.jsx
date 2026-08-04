@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { ROUTES } from "../../../routes/paths.js";
 import Navbar from "../../landing/components/Navbar";
 import OwnerSidebar from "../components/layout/OwnerSidebar";
 import OwnerProfileHeader from "../components/layout/OwnerProfileHeader";
@@ -79,8 +80,8 @@ const OwnerDashboard = () => {
     setIsFormOpen(false);
     setEditingHostel(null);
   };
-  const handleAddProperty = () => {
-  navigate("/owner-dashboard/add-property");
+ const handleAddProperty = () => {
+  navigate(ROUTES.ADD_PROPERTY);
 };
   const handleEdit = (hostel) => {
     setEditingHostel(hostel);

@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const BASE_URL = "/api/v1/owner/hostels"; 
+
 const hostelApi = axios.create({
-  baseURL: "http://localhost:5000/api/v1/hostels/",
+  baseURL: "http://localhost:5000/api/v1/owner/hostels/",
   withCredentials: true,
 });
 

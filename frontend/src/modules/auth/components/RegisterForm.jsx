@@ -115,9 +115,10 @@ const RegisterForm = () => {
 
   // Input wrapper style
   const inputWrapper = (field) =>
-    `flex items-center gap-3 w-full bg-white border rounded-xl px-4 py-3 transition-all focus-within:ring-2 focus-within:ring-[#ec6a52]/20 ${errors[field]
-      ? "border-red-400 focus-within:border-red-500"
-      : "border-gray-200 focus-within:border-[#ec6a52]"
+    `flex items-center gap-3 w-full bg-white border rounded-xl px-4 py-3 transition-all focus-within:ring-2 focus-within:ring-[#ec6a52]/20 ${
+      errors[field]
+        ? "border-red-400 focus-within:border-red-500"
+        : "border-gray-200 focus-within:border-[#ec6a52]"
     }`;
 
   const inputBase =
