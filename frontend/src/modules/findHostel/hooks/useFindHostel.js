@@ -37,6 +37,8 @@ export const useFindHostel = () => {
 
     const res = await findApi.search(params);
 
+
+
     if (res.data.success) {
       setHostels(res.data.data.hostels || []);
       setPagination(
@@ -81,13 +83,17 @@ export const useFindHostel = () => {
     fetchHostels(filters);
   }, [filters, fetchHostels]);
 
+  const cities = [...new Set(hostels.map((hostel) => hostel.city).filter(Boolean))];
+
+
   return {
     filters,
-    hostels,
-    pagination,
-    loading,
-    error,
-    updateFilters,
-    refetch,
+  hostels,
+  pagination,
+  loading,
+  error,
+  updateFilters,
+  refetch,
+  cities,
   };
 }

@@ -37,6 +37,8 @@ const httpServer = http.createServer(app);
 // MIDDLEWARE
 // ======================================================
 
+console.log("Express CORS Origin:", env.frontendUrl);
+
 app.use(
   cors({
     origin: env.frontendUrl,

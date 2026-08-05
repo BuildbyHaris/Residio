@@ -1,11 +1,21 @@
 // src/modules/findHostel/components/FindHostelFilters.jsx
-import { MapPin, ChevronDown, Star } from 'lucide-react';
+import { MapPin, ChevronDown, Star } from "lucide-react";
 import {
-  SORT_OPTIONS, GENDER_OPTIONS, BUDGET_PRESETS,
-  AMENITIES, RATING_OPTIONS, PRICE_RANGE
-} from '../constants/find.constants';
+  SORT_OPTIONS,
+  GENDER_OPTIONS,
+  BUDGET_PRESETS,
+  AMENITIES,
+  RATING_OPTIONS,
+  PRICE_RANGE,
+} from "../constants/find.constants";
 
-const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply }) => {
+const FindHostelFilters = ({
+  filters,
+  cities = [],
+  onChange,
+  onReset,
+  onApply,
+}) => {
   const min = Number(filters.minPrice) || PRICE_RANGE.MIN;
   const max = Number(filters.maxPrice) || PRICE_RANGE.MAX;
 
@@ -29,13 +39,15 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
         </label>
         <div className="relative">
           <select
-            value={filters.city || ''}
+            value={filters.city || ""}
             onChange={(e) => onChange({ city: e.target.value })}
             className="w-full text-sm border border-[#E5E7EB] rounded-lg px-3 py-2.5 bg-white appearance-none pr-8 outline-none focus:border-[#F5732C]"
           >
             <option value="">All Cities</option>
             {cities.map((c) => (
-              <option key={c.value || c} value={c.value || c}>{c.label || c}</option>
+              <option key={c.value || c} value={c.value || c}>
+                {c.label || c}
+              </option>
             ))}
           </select>
           <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -44,10 +56,15 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
 
       {/* Price Range */}
       <div className="mb-5">
-        <div className="text-sm font-semibold text-[#1B2333] mb-3">Price Range</div>
+        <div className="text-sm font-semibold text-[#1B2333] mb-3">
+          Price Range
+        </div>
         <div className="flex justify-between text-xs text-gray-600 mb-2">
-          <span>₹{min.toLocaleString()}</span>
-          <span>₹{max.toLocaleString()}{max >= PRICE_RANGE.MAX ? '+' : ''}</span>
+          <span>RS. {min.toLocaleString()}</span>
+          <span>
+            RS. {max.toLocaleString()}
+           {max >= PRICE_RANGE.MAX ? "+" : ""}
+          </span>
         </div>
         <input
           type="range"
@@ -65,8 +82,8 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
               onClick={() => onChange({ minPrice: p.min, maxPrice: p.max })}
               className={`text-xs px-3 py-1.5 rounded-lg border transition ${
                 isPresetActive(p)
-                  ? 'bg-[#FFF6F0] border-[#F5732C] text-[#F5732C]'
-                  : 'bg-white border-[#E5E7EB] text-gray-700 hover:border-[#F5732C]'
+                  ? "bg-[#FFF6F0] border-[#F5732C] text-[#F5732C]"
+                  : "bg-white border-[#E5E7EB] text-gray-700 hover:border-[#F5732C]"
               }`}
             >
               {p.label}
@@ -80,7 +97,10 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
         <div className="text-sm font-semibold text-[#1B2333] mb-2">Sort By</div>
         <div className="space-y-2">
           {SORT_OPTIONS.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+            <label
+              key={opt.value}
+              className="flex items-center gap-2 cursor-pointer text-sm text-gray-700"
+            >
               <input
                 type="radio"
                 name="sort"
@@ -96,15 +116,22 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
 
       {/* Hostel Type */}
       <div className="mb-5">
-        <div className="text-sm font-semibold text-[#1B2333] mb-2">Hostel Type</div>
+        <div className="text-sm font-semibold text-[#1B2333] mb-2">
+          Hostel Type
+        </div>
         <div className="flex flex-wrap gap-4">
           {GENDER_OPTIONS.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+            <label
+              key={opt.value}
+              className="flex items-center gap-2 cursor-pointer text-sm text-gray-700"
+            >
               <input
                 type="checkbox"
                 checked={filters.gender === opt.value}
                 onChange={() =>
-                  onChange({ gender: filters.gender === opt.value ? '' : opt.value })
+                  onChange({
+                    gender: filters.gender === opt.value ? "" : opt.value,
+                  })
                 }
                 className="w-4 h-4 accent-[#F5732C] rounded"
               />
@@ -116,7 +143,9 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
 
       {/* Amenities */}
       <div className="mb-5">
-        <div className="text-sm font-semibold text-[#1B2333] mb-2">Amenities</div>
+        <div className="text-sm font-semibold text-[#1B2333] mb-2">
+          Amenities
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {AMENITIES.map((a) => {
             const checked = (filters.amenities || []).includes(a.value);
@@ -143,17 +172,24 @@ const FindHostelFilters = ({ filters, cities = [], onChange, onReset, onApply })
         <div className="text-sm font-semibold text-[#1B2333] mb-2">Rating</div>
         <div className="space-y-2">
           {RATING_OPTIONS.map((r) => (
-            <label key={r.value} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+            <label
+              key={r.value}
+              className="flex items-center gap-2 cursor-pointer text-sm text-gray-700"
+            >
               <input
                 type="checkbox"
                 checked={Number(filters.minRating) === r.value}
                 onChange={() =>
-                  onChange({ minRating: Number(filters.minRating) === r.value ? 0 : r.value })
+                  onChange({
+                    minRating:
+                      Number(filters.minRating) === r.value ? 0 : r.value,
+                  })
                 }
                 className="w-4 h-4 accent-[#F5732C] rounded"
               />
               <span className="flex items-center gap-1">
-                {r.value} <Star className="w-3.5 h-3.5 fill-[#F5732C] text-[#F5732C]" />
+                {r.value}{" "}
+                <Star className="w-3.5 h-3.5 fill-[#F5732C] text-[#F5732C]" />
                 <span className="text-gray-600">& above</span>
               </span>
             </label>

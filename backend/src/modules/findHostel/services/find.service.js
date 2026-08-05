@@ -2,10 +2,11 @@ import Hostel from "../../ownerDashboard/models/hostel.model.js";
 import { SORT_OPTIONS, DEFAULT_LIMIT } from "../constants/find.constants.js";
 
 export const searchHostels = async (query) => {
+
   const filter = { status: "Active" };
 
-  if (query.search) {
-    const regex = new RegExp(query.search, "i");
+  if (query.q) {
+    const regex = new RegExp(query.q, "i");
     filter.$or = [{ name: regex }, { city: regex }, { address: regex }];
   }
   if (query.gender) filter.genderPreference = query.gender;
@@ -16,7 +17,16 @@ export const searchHostels = async (query) => {
     if (query.maxPrice) filter["roomTypes.price"].$lte = parseInt(query.maxPrice);
   }
   if (query.availability === "true") filter["roomTypes.availableBeds"] = { $gt: 0 };
-  if (query.amenities) filter.amenities = { $all: query.amenities };
+const amenities =
+  query.amenities || query["amenities[]"];
+
+if (amenities) {
+  filter.amenities = {
+    $all: Array.isArray(amenities)
+      ? amenities
+      : [amenities],
+  };
+}
   if (query.minRating) filter.rating = { $gte: parseInt(query.minRating) };
   if (query.city) filter.city = { $regex: query.city, $options: "i" };
 

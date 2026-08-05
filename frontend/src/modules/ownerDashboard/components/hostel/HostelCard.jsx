@@ -1,6 +1,6 @@
 import ThreeDotMenu from "./ThreeDotMenu";
 
-const HostelCard = ({ hostel, onEdit, onDelete }) => {
+const HostelCard = ({ hostel, onEdit, onDelete, showActions = true }) => {
   const coverImage = hostel.images?.[0]?.url || null;
 
   const totalAvailableBeds =
@@ -32,10 +32,12 @@ const HostelCard = ({ hostel, onEdit, onDelete }) => {
               {hostel.address}, {hostel.city}
             </p>
           </div>
-          <ThreeDotMenu
-            onEdit={() => onEdit(hostel)}
-            onDelete={() => onDelete(hostel._id)}
-          />
+  {showActions && (
+  <ThreeDotMenu
+    onEdit={() => onEdit(hostel)}
+    onDelete={() => onDelete(hostel._id)}
+  />
+)},
         </div>
 
         {/* Badges: Gender + Status */}
