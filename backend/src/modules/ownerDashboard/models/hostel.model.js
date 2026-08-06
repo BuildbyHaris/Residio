@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const imageSchema = new mongoose.Schema(
   {
@@ -100,16 +101,27 @@ const hostelSchema = new mongoose.Schema(
       type: [imageSchema],
       default: [],
     },
-    
+
     contactNumber: {
       type: String,
-      required: true,
+      required: [true, "Contact number is required"],
+      trim: true,
       validate: {
-        validator: function(value) {
-          return /^(?:\+92|0)[0-9]{10,11}$/.test(value);
+        validator: function (value) {
+          const phone = value.trim();
+
+          let parsedPhone;
+
+          if (phone.startsWith("+")) {
+            parsedPhone = parsePhoneNumberFromString(phone);
+          } else {
+            parsedPhone = parsePhoneNumberFromString(phone, "PK");
+          }
+
+          return parsedPhone && parsedPhone.isValid();
         },
-        message: "Enter a valid Pakistan contact number"
-      }
+        message: "Enter a valid phone number",
+      },
     },
 
     totalBeds: {
