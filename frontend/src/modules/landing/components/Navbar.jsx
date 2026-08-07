@@ -7,6 +7,7 @@ import Button from "./Button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import ProfileDropdown from "./ProfileDropdown";
+import { ROUTES } from "../../../routes/paths.js"; // ✅ Ensure this is present
 
 function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

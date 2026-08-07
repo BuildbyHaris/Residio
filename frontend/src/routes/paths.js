@@ -1,5 +1,3 @@
-// src/routes/paths.js
-
 export const ROUTES = {
   // Public
   HOME: "/",
@@ -18,24 +16,24 @@ export const ROUTES = {
   WISHLIST: "/wishlist",
   MY_BOOKINGS: "/my-bookings",
 
+  // Find Hostel
+  FIND_HOSTEL: "/find-hostel",
+  HOSTEL_DETAIL: "/hostel/:id",
+
   // Owner
   OWNER_DASHBOARD: "/owner-dashboard",
-  OWNER_PROPERTIES: "/owner/properties",
-  ADD_PROPERTY: "/owner/properties/new",
-  EDIT_PROPERTY: "/owner/properties/:id/edit",
-  OWNER_BOOKINGS: "/owner/bookings",
-  OWNER_ANALYTICS: "/owner/analytics",
-  OWNER_REVIEWS: "/owner/reviews",
-  OWNER_SETTINGS: "/owner/settings",
+  OWNER_PROPERTIES: "/owner-dashboard/properties",
+  ADD_PROPERTY: "/owner-dashboard/add-property",
+  EDIT_PROPERTY: "/owner-dashboard/properties/:id/edit",
+  OWNER_BOOKINGS: "/owner-dashboard/bookings",
+  OWNER_ANALYTICS: "/owner-dashboard/analytics",
+  OWNER_REVIEWS: "/owner-dashboard/reviews",
+  OWNER_SETTINGS: "/owner-dashboard/settings",
 
   // Admin
-  ADMIN_DASHBOARD: "/admin",
+  ADMIN_DASHBOARD: "/admin/dashboard",
   ADMIN_OWNER_VERIFICATIONS: "/admin/owner-verifications",
-  ADMIN_PROPERTY_APPROVALS: "/admin/property-approvals",
-  ADMIN_USERS: "/admin/users",
-  ADMIN_PROPERTIES: "/admin/properties",
-  ADMIN_BOOKINGS: "/admin/bookings",
-  ADMIN_REPORTS: "/admin/reports",
-  ADMIN_NOTIFICATIONS: "/admin/notifications",
-  ADMIN_SETTINGS: "/admin/settings",
+
+  // Chat
+CHAT: "/chat/:conversationId",
 };

@@ -23,7 +23,13 @@ const emptyFormState = {
   totalBeds: "",
   amenities: [],
   roomTypes: [
-    { type: "Single", price: "", availableBeds: "", imageFile: null, existingImage: null },
+    {
+      type: "Single",
+      price: "",
+      availableBeds: "",
+      imageFile: null,
+      existingImage: null,
+    },
   ],
 };
 
@@ -158,7 +164,13 @@ const HostelForm = ({
       ...prev,
       roomTypes: [
         ...prev.roomTypes,
-        { type: "Single", price: "", availableBeds: "", imageFile: null, existingImage: null },
+        {
+          type: "Single",
+          price: "",
+          availableBeds: "",
+          imageFile: null,
+          existingImage: null,
+        },
       ],
     }));
   };
@@ -575,9 +587,7 @@ const HostelForm = ({
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               {errors.totalBeds && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.totalBeds}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.totalBeds}</p>
               )}
             </div>
           </div>
@@ -605,7 +615,8 @@ const HostelForm = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Hostel Photos (max 10) {isEditMode && "— leave empty to keep existing"}
+              Hostel Photos (max 5){" "}
+              {isEditMode && "— leave empty to keep existing"}
             </label>
             <input
               type="file"
@@ -659,9 +670,7 @@ const HostelForm = ({
               </div>
             )}
             {errors.hostelImages && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.hostelImages}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.hostelImages}</p>
             )}
           </div>
 
@@ -717,7 +726,7 @@ const HostelForm = ({
                         handleRoomTypeChange(
                           index,
                           "availableBeds",
-                          e.target.value
+                          e.target.value,
                         )
                       }
                       className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -851,7 +860,11 @@ const HostelForm = ({
               disabled={submitting}
               className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? "Saving..." : isEditMode ? "Update Hostel" : "Save Hostel"}
+              {submitting
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Hostel"
+                  : "Save Hostel"}
             </button>
           </div>
         </form>

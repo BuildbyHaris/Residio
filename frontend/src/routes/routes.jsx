@@ -1,3 +1,4 @@
+  
 import {
   BrowserRouter,
   Routes,
@@ -5,16 +6,26 @@ import {
   Navigate,
 } from "react-router-dom";
 
-// Landing
+import { ROUTES } from "./paths.js";
+
+// ============================================================
+// LANDING
+// ============================================================
+
 import LandingPage from "../modules/landing/pages/Landing";
 import FindHostels from "../modules/landing/pages/FindHostels";
 import PGs from "../modules/landing/pages/PGs";
 import HowItWorks from "../modules/landing/pages/HowItWorks";
 import About from "../modules/landing/pages/About";
 import Contact from "../modules/landing/pages/Contact";
+
+// New Hostel Details page from Fida
 import HostelDetails from "../modules/landing/pages/HostelDetails";
 
-// Auth
+// ============================================================
+// AUTH
+// ============================================================
+
 import Register from "../modules/auth/pages/Register";
 import VerifyOtp from "../modules/auth/pages/VerifyOtp";
 import Login from "../modules/auth/pages/Login";
@@ -22,44 +33,66 @@ import ForgotPassword from "../modules/auth/pages/ForgotPassword";
 import VerifyResetOtp from "../modules/auth/pages/VerifyResetOtp";
 import ResetPassword from "../modules/auth/pages/ResetPassword";
 
-// User
+// ============================================================
+// USER
+// ============================================================
+
 import ProfilePage from "../modules/profile/pages/ProfilePage";
 
-// Owner
+// ============================================================
+// OWNER
+// ============================================================
+
 import OwnerDashboard from "../modules/ownerDashboard/pages/ownerDashboard";
 import OwnerVerificationPage from "../modules/ownerVerification/pages/OwnerVerificationPage";
 import MyProperties from "../modules/ownerDashboard/pages/MyProperties";
 import AddProperty from "../modules/ownerDashboard/pages/AddProperty";
 
+// ============================================================
+// ADMIN
+// ============================================================
 
-// Admin
 import AdminLogin from "../modules/admin/pages/AdminLogin";
 import AdminDashboard from "../modules/admin/pages/AdminDashboard";
 import OwnerVerifications from "../modules/admin/pages/OwnerVerifications";
 import OwnerVerificationDetailsPage from "../modules/admin/pages/OwnerVerificationDetails";
 
-// Guards
+// ============================================================
+// GUARDS
+// ============================================================
+
 import ProtectedRoute from "./ProtectedRoute";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+
+// ============================================================
+// FIND HOSTEL
+// ============================================================
+
+import FindHostelPage from "../modules/findHostel/pages/FindHostelPage.jsx";
+
+// ============================================================
+// CHAT
+// ============================================================
+
+import ChatPage from "../modules/chat/pages/ChatPage.jsx";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* Landing */}
+        {/* =====================================================
+            PUBLIC / LANDING
+        ===================================================== */}
+
         <Route
-          path="/"
+          path={ROUTES.HOME}
           element={<LandingPage />}
-        />
-        <Route
-          path="/find-hostels"
-          element={<FindHostels />}
         />
 
         <Route
-          path="/hostels/:hostelId"
-          element={<HostelDetails />}
+          path="/find-hostels"
+          element={<FindHostels />}
         />
 
         <Route
@@ -82,102 +115,167 @@ const AppRoutes = () => {
           element={<Contact />}
         />
 
-        {/* Auth */}
+
+        {/* =====================================================
+            AUTH
+        ===================================================== */}
+
         <Route
-          path="/register"
+          path={ROUTES.REGISTER}
           element={<Register />}
         />
 
         <Route
-          path="/verify-otp"
+          path={ROUTES.VERIFY_OTP}
           element={<VerifyOtp />}
         />
 
         <Route
-          path="/login"
+          path={ROUTES.LOGIN}
           element={<Login />}
         />
 
         <Route
-          path="/forgot-password"
+          path={ROUTES.FORGOT_PASSWORD}
           element={<ForgotPassword />}
         />
 
         <Route
-          path="/verify-reset-otp"
+          path={ROUTES.VERIFY_RESET_OTP}
           element={<VerifyResetOtp />}
         />
 
         <Route
-          path="/reset-password"
+          path={ROUTES.RESET_PASSWORD}
           element={<ResetPassword />}
         />
 
-        {/* User Protected */}
+
+        {/* =====================================================
+            PROTECTED USER ROUTES
+        ===================================================== */}
+
         <Route element={<ProtectedRoute />}>
+
+          {/* Profile */}
           <Route
-            path="/profile"
+            path={ROUTES.PROFILE}
             element={<ProfilePage />}
           />
 
+          {/* Owner Verification */}
           <Route
-            path="/owner-verification"
+            path={ROUTES.OWNER_VERIFICATION}
             element={<OwnerVerificationPage />}
           />
+
+          {/* Find Hostels */}
+          <Route
+            path={ROUTES.FIND_HOSTEL}
+            element={<FindHostelPage />}
+          />
+
+          {/* Chat */}
+          <Route
+            path={ROUTES.CHAT}
+            element={<ChatPage />}
+          />
+
         </Route>
 
-        {/* Owner Dashboard */}
+
+        {/* =====================================================
+            HOSTEL DETAILS
+            Fida's new HostelDetails page
+        ===================================================== */}
+
+        <Route
+          path={ROUTES.HOSTEL_DETAIL}
+          element={<HostelDetails />}
+        />
+
+
+        {/* =====================================================
+            OWNER DASHBOARD
+        ===================================================== */}
+
         <Route
           element={
             <ProtectedRoute allowedRole="owner" />
           }
         >
+
+          {/* Owner Dashboard */}
           <Route
-            path="/owner-dashboard"
+            path={ROUTES.OWNER_DASHBOARD}
             element={<OwnerDashboard />}
           />
+
+          {/* My Properties */}
           <Route
-            path="/owner-dashboard/properties"
+            path={ROUTES.OWNER_PROPERTIES}
             element={<MyProperties />}
           />
+
+          {/* Add Property */}
           <Route
-            path="/owner-dashboard/add-property"
+            path={ROUTES.ADD_PROPERTY}
             element={<AddProperty />}
           />
+
         </Route>
 
-        {/* Admin Login */}
+
+        {/* =====================================================
+            ADMIN LOGIN
+        ===================================================== */}
+
         <Route
           path="/admin/login"
           element={<AdminLogin />}
         />
 
-        {/* Admin Protected */}
-        <Route element={<AdminProtectedRoute />}>
+
+        {/* =====================================================
+            ADMIN PROTECTED ROUTES
+        ===================================================== */}
+
+        <Route
+          element={<AdminProtectedRoute />}
+        >
+
+          {/* Admin Dashboard */}
           <Route
             path="/admin/dashboard"
             element={<AdminDashboard />}
           />
 
+          {/* Owner Verifications */}
           <Route
             path="/admin/owner-verifications"
             element={<OwnerVerifications />}
           />
 
+          {/* Owner Verification Details */}
           <Route
             path="/admin/owner-verifications/:verificationId"
             element={
               <OwnerVerificationDetailsPage />
             }
           />
+
         </Route>
 
-        {/* 404 */}
+
+        {/* =====================================================
+            404
+        ===================================================== */}
+
         <Route
           path="*"
           element={
             <Navigate
-              to="/"
+              to={ROUTES.HOME}
               replace
             />
           }
@@ -189,3 +287,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+
