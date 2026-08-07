@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 
 import { env } from "./src/config/env.js";
 
+import reviewRoutes from "./src/modules/reviews/routes/review.routes.js";
 import findRoutes from "./src/modules/findHostel/routes/find.routes.js";
 import authRoutes from "./src/modules/auth/routes/auth.routes.js";
 import profileRoutes from "./src/modules/profile/routes/profile.routes.js";
@@ -102,6 +103,12 @@ app.use(
   "/api/v1/admin",
   adminRoutes
 );
+
+app.use(
+  "/api/v1/reviews",
+  reviewRoutes
+);
+
 
 
 // ======================================================

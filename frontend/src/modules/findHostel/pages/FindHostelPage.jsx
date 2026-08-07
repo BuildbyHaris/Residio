@@ -29,11 +29,10 @@ const FindHostelPage = () => {
 
  const handleReset = () => {
   updateFilters(DEFAULT_FILTERS);
-  refetch();
 };
-  const handleApply = () => {
+
+const handleApply = () => {
   updateFilters({ page: 1 });
-  refetch();
 };
 
   const gridCols = useMemo(

@@ -37,7 +37,7 @@ const HostelCard = ({ hostel, onEdit, onDelete, showActions = true }) => {
     onEdit={() => onEdit(hostel)}
     onDelete={() => onDelete(hostel._id)}
   />
-)},
+)}
         </div>
 
         {/* Badges: Gender + Status */}
@@ -131,15 +131,23 @@ const HostelCard = ({ hostel, onEdit, onDelete, showActions = true }) => {
               ))}
             </div>
           </div>
+          
         )}
+        <div className="flex gap-3 pt-3 border-t border-gray-100">
+  <button
+    type="button"
+    className="flex-1 border border-[#F5732C] text-[#F5732C] font-medium py-2 rounded-lg hover:bg-[#FFF6F0] transition-colors duration-200"
+  >
+    Chat
+  </button>
 
-        {/* Contact Number */}
-        <div className="flex items-center justify-between text-sm pt-2 border-t border-gray-100">
-          <span className="text-gray-500">Contact</span>
-          <span className="font-medium text-gray-700">
-            {hostel.contactNumber}
-          </span>
-        </div>
+  <button
+    type="button"
+    className="flex-1 bg-[#F5732C] text-white font-medium py-2 rounded-lg hover:bg-[#E5631D] transition-colors duration-200"
+  >
+    View Details
+  </button>
+</div>
       </div>
     </div>
   );

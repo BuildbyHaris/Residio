@@ -26,14 +26,16 @@ export const useFindHostel = () => {
     const params = { ...searchFilters };
 
     Object.keys(params).forEach((key) => {
-      if (
-        params[key] === "" ||
-        params[key] === null ||
-        params[key] === undefined
-      ) {
-        delete params[key];
-      }
-    });
+  if (
+    params[key] === "" ||
+    params[key] === null ||
+    params[key] === undefined ||
+    params[key] === 0 ||
+    (Array.isArray(params[key]) && params[key].length === 0)
+  ) {
+    delete params[key];
+  }
+});
 
     const res = await findApi.search(params);
 

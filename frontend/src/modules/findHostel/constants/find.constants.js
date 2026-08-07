@@ -68,7 +68,7 @@ export const RATING_OPTIONS = [
 ];
 
 export const PRICE_RANGE = {
-  MIN: 3000,
+  MIN: 0,
   MAX: 20000,
 };
 

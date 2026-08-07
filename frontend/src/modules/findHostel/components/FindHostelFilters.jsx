@@ -16,9 +16,15 @@ const FindHostelFilters = ({
   onReset,
   onApply,
 }) => {
-  const min = Number(filters.minPrice) || PRICE_RANGE.MIN;
-  const max = Number(filters.maxPrice) || PRICE_RANGE.MAX;
+const min =
+  filters.minPrice === ""
+    ? PRICE_RANGE.MIN
+    : Number(filters.minPrice);
 
+const max =
+  filters.maxPrice === ""
+    ? PRICE_RANGE.MAX
+    : Number(filters.maxPrice);
   const toggleAmenity = (val) => {
     const current = Array.isArray(filters.amenities) ? filters.amenities : [];
     const next = current.includes(val)
@@ -55,42 +61,28 @@ const FindHostelFilters = ({
       </div>
 
       {/* Price Range */}
-      <div className="mb-5">
-        <div className="text-sm font-semibold text-[#1B2333] mb-3">
-          Price Range
-        </div>
-        <div className="flex justify-between text-xs text-gray-600 mb-2">
-          <span>RS. {min.toLocaleString()}</span>
-          <span>
-            RS. {max.toLocaleString()}
-           {max >= PRICE_RANGE.MAX ? "+" : ""}
-          </span>
-        </div>
-        <input
-          type="range"
-          min={PRICE_RANGE.MIN}
-          max={PRICE_RANGE.MAX}
-          step={500}
-          value={max}
-          onChange={(e) => onChange({ maxPrice: Number(e.target.value) })}
-          className="w-full accent-[#F5732C]"
-        />
-        <div className="flex flex-wrap gap-2 mt-3">
-          {BUDGET_PRESETS.map((p) => (
-            <button
-              key={p.label}
-              onClick={() => onChange({ minPrice: p.min, maxPrice: p.max })}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition ${
-                isPresetActive(p)
-                  ? "bg-[#FFF6F0] border-[#F5732C] text-[#F5732C]"
-                  : "bg-white border-[#E5E7EB] text-gray-700 hover:border-[#F5732C]"
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
+ <div className="mb-5">
+  <div className="text-sm font-semibold text-[#1B2333] mb-3">
+    Price Range
+  </div>
+<div className="flex justify-between text-xs text-gray-600 mb-2">
+  <span>RS. {(filters.minPrice || 0).toLocaleString()}</span>
+  <span>RS. 20,000+</span>
+</div>
+  <input
+    type="range"
+    min={0}
+    max={PRICE_RANGE.MAX}
+    step={500}
+    value={filters.minPrice || 0}
+    onChange={(e) =>
+      onChange({
+        minPrice: Number(e.target.value),
+      })
+    }
+    className="w-full accent-[#F5732C]"
+  />
+</div>
 
       {/* Sort By */}
       <div className="mb-5">
@@ -168,7 +160,7 @@ const FindHostelFilters = ({
       </div>
 
       {/* Rating */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <div className="text-sm font-semibold text-[#1B2333] mb-2">Rating</div>
         <div className="space-y-2">
           {RATING_OPTIONS.map((r) => (
@@ -195,7 +187,7 @@ const FindHostelFilters = ({
             </label>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-[#EDEDED]">
