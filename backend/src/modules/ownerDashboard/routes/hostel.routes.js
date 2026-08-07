@@ -16,10 +16,14 @@ const router = express.Router();
 
 router.post(
   "/",
+  (req, res, next) => {
+    console.log("✅ Hostel POST route reached");
+    next();
+  },
   protect,
   authorizeOwner,
   upload.fields([
-    { name: "images", maxCount: 5 },
+    { name: "images", maxCount: 10 },
     { name: "roomImages", maxCount: 10 },
   ]),
   createHostel

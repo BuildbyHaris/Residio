@@ -110,19 +110,34 @@ export const updateHostelService = async (hostelId, ownerId, body, files) => {
     totalBeds,
     status,
   } = body;
+  const deletedHostelImages = body.deletedHostelImages
+  ? parseJSONField(body.deletedHostelImages, "deletedHostelImages")
+  : [];
 
   let roomTypes;
   if (body.roomTypes) {
     roomTypes = parseJSONField(body.roomTypes, "roomTypes");
   }
+  // Delete removed hostel images
+  if (deletedHostelImages.length > 0) {
+    await Promise.all(
+      deletedHostelImages.map((publicId) =>
+        deleteFromCloudinary(publicId)
+      )
+    );
+
+    hostel.images = hostel.images.filter(
+      (image) => !deletedHostelImages.includes(image.publicId)
+    );
+  }
 
   // Naye hostel images (append to existing)
-  let hostelImages = hostel.images;
+  let hostelImages = [...hostel.images];
   if (files?.images?.length) {
     const newImages = await Promise.all(
       files.images.map((file) => uploadToCloudinary(file.buffer, "risido/hostels"))
     );
-    hostelImages = [...hostel.images, ...newImages];
+    hostelImages = [...hostelImages, ...newImages];
   }
 
   // Room-type images
@@ -147,7 +162,6 @@ export const updateHostelService = async (hostelId, ownerId, body, files) => {
   if (roomTypes) hostel.roomTypes = roomTypes;
   if (body.amenities) hostel.amenities = parseJSONField(body.amenities, "amenities");
   hostel.images = hostelImages;
-
   return saveHostel(hostel);
 };
 
