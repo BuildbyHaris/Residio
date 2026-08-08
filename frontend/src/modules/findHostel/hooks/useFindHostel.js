@@ -26,16 +26,20 @@ export const useFindHostel = () => {
     const params = { ...searchFilters };
 
     Object.keys(params).forEach((key) => {
-      if (
-        params[key] === "" ||
-        params[key] === null ||
-        params[key] === undefined
-      ) {
-        delete params[key];
-      }
-    });
+  if (
+    params[key] === "" ||
+    params[key] === null ||
+    params[key] === undefined ||
+    params[key] === 0 ||
+    (Array.isArray(params[key]) && params[key].length === 0)
+  ) {
+    delete params[key];
+  }
+});
 
     const res = await findApi.search(params);
+
+
 
     if (res.data.success) {
       setHostels(res.data.data.hostels || []);
@@ -81,13 +85,17 @@ export const useFindHostel = () => {
     fetchHostels(filters);
   }, [filters, fetchHostels]);
 
+  const cities = [...new Set(hostels.map((hostel) => hostel.city).filter(Boolean))];
+
+
   return {
     filters,
-    hostels,
-    pagination,
-    loading,
-    error,
-    updateFilters,
-    refetch,
+  hostels,
+  pagination,
+  loading,
+  error,
+  updateFilters,
+  refetch,
+  cities,
   };
 }

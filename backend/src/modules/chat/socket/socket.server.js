@@ -12,6 +12,9 @@ let io;
  * SOCKET.IO INITIALIZATION
  * =========================================================
  */
+
+console.log("Socket CORS Origin:", env.frontendUrl);
+
 export const initializeSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {

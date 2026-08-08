@@ -2,21 +2,45 @@ import Hostel from "../../ownerDashboard/models/hostel.model.js";
 import { SORT_OPTIONS, DEFAULT_LIMIT } from "../constants/find.constants.js";
 
 export const searchHostels = async (query) => {
+
   const filter = { status: "Active" };
 
-  if (query.search) {
-    const regex = new RegExp(query.search, "i");
+  if (query.q) {
+    const regex = new RegExp(query.q, "i");
     filter.$or = [{ name: regex }, { city: regex }, { address: regex }];
   }
   if (query.gender) filter.genderPreference = query.gender;
   if (query.roomType) filter["roomTypes.type"] = query.roomType;
   if (query.minPrice || query.maxPrice) {
     filter["roomTypes.price"] = {};
-    if (query.minPrice) filter["roomTypes.price"].$gte = parseInt(query.minPrice);
-    if (query.maxPrice) filter["roomTypes.price"].$lte = parseInt(query.maxPrice);
+    if (
+  query.minPrice !== undefined &&
+  query.minPrice !== "" ||
+  query.maxPrice !== undefined &&
+  query.maxPrice !== ""
+) {
+  filter["roomTypes.price"] = {};
+
+  if (query.minPrice !== undefined && query.minPrice !== "") {
+    filter["roomTypes.price"].$gte = Number(query.minPrice);
+  }
+
+  if (query.maxPrice !== undefined && query.maxPrice !== "") {
+    filter["roomTypes.price"].$lte = Number(query.maxPrice);
+  }
+}
   }
   if (query.availability === "true") filter["roomTypes.availableBeds"] = { $gt: 0 };
-  if (query.amenities) filter.amenities = { $all: query.amenities };
+const amenities =
+  query.amenities || query["amenities[]"];
+
+if (amenities) {
+  filter.amenities = {
+    $all: Array.isArray(amenities)
+      ? amenities
+      : [amenities],
+  };
+}
   if (query.minRating) filter.rating = { $gte: parseInt(query.minRating) };
   if (query.city) filter.city = { $regex: query.city, $options: "i" };
 
@@ -36,18 +60,40 @@ export const searchHostels = async (query) => {
       { $match: filter },
       { $unwind: "$roomTypes" },
       {
-        $group: {
-          _id: "$_id",
-          owner: { $first: "$owner" },
-          name: { $first: "$name" },
-          city: { $first: "$city" },
-          address: { $first: "$address" },
-          genderPreference: { $first: "$genderPreference" },
-          images: { $first: "$images" },
-          roomTypes: { $push: "$roomTypes" },
-          minPrice: { $min: "$roomTypes.price" },
-        },
-      },
+  $group: {
+    _id: "$_id",
+
+    owner: { $first: "$owner" },
+
+    name: { $first: "$name" },
+
+    description: { $first: "$description" },
+
+    address: { $first: "$address" },
+
+    city: { $first: "$city" },
+
+    genderPreference: { $first: "$genderPreference" },
+
+    status: { $first: "$status" },
+
+    totalBeds: { $first: "$totalBeds" },
+
+    contactNumber: { $first: "$contactNumber" },
+
+    amenities: { $first: "$amenities" },
+
+    rating: { $first: "$rating" },
+
+    reviewCount: { $first: "$reviewCount" },
+
+    images: { $first: "$images" },
+
+    roomTypes: { $push: "$roomTypes" },
+
+    minPrice: { $min: "$roomTypes.price" },
+  },
+},
       { $sort: { minPrice: sortOption.order } },
       { $skip: skip },
       { $limit: limit },

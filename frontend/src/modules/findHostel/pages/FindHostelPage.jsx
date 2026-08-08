@@ -1,10 +1,9 @@
-// src/modules/findHostel/pages/FindHostelPage.jsx
 import { useState, useMemo } from 'react';
 import { Grid3x3, List, AlertCircle, SearchX } from 'lucide-react';
 import Navbar from '../../landing/components/Navbar';
 import FindSearchBar from '../components/FindSearchBar';
 import FindHostelFilters from '../components/FindHostelFilters';
-import FindHostelCard from '../components/FindHostelCard';
+import HostelCard from '../../ownerDashboard/components/hostel/HostelCard';
 import ActiveFilterChips from '../components/ActiveFilterChips';
 import FindHostelSkeleton from '../components/FindHostelSkeleton';
 import FindHostelPagination from '../components/FindHostelPagination';
@@ -28,8 +27,13 @@ const FindHostelPage = () => {
   const currentPage = pagination.page ?? 1;
   const totalPages = pagination.totalPages ?? 1;
 
-  const handleReset = () => updateFilters(DEFAULT_FILTERS);
-  const handleApply = () => refetch?.();
+ const handleReset = () => {
+  updateFilters(DEFAULT_FILTERS);
+};
+
+const handleApply = () => {
+  updateFilters({ page: 1 });
+};
 
   const gridCols = useMemo(
     () => view === 'grid'
@@ -128,7 +132,7 @@ const FindHostelPage = () => {
               <>
                 <div className={gridCols}>
                   {hostels.map((h) => (
-                    <FindHostelCard key={h._id || h.id} hostel={h} />
+                    <HostelCard key={h._id || h.id} hostel={h} showActions={false} />
                   ))}
                 </div>
                 <FindHostelPagination

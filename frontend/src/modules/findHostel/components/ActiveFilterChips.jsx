@@ -1,18 +1,19 @@
 // src/modules/findHostel/components/ActiveFilterChips.jsx
-import { X } from 'lucide-react';
-import { AMENITIES } from '../constants/find.constants';
+import { X } from "lucide-react";
+import { AMENITIES } from "../constants/find.constants";
 
 const ActiveFilterChips = ({ filters, onChange, onClearAll }) => {
   const chips = [];
 
-  if (filters.city) chips.push({ key: 'city', label: filters.city, clear: { city: '' } });
+  if (filters.city)
+    chips.push({ key: "city", label: filters.city, clear: { city: "" } });
 
   const min = Number(filters.minPrice) || 0;
   const max = Number(filters.maxPrice) || 0;
   if (min || max) {
     chips.push({
-      key: 'price',
-      label: `₹${min.toLocaleString()} – ₹${max.toLocaleString()}`,
+      key: "price",
+      label: `RS${min.toLocaleString()} – RS${max.toLocaleString()}`,
       clear: { minPrice: 0, maxPrice: 0 },
     });
   }
@@ -26,10 +27,11 @@ const ActiveFilterChips = ({ filters, onChange, onClearAll }) => {
     });
   });
 
-  if (filters.gender) chips.push({ key: 'gender', label: filters.gender, clear: { gender: '' } });
+  if (filters.gender)
+    chips.push({ key: "gender", label: filters.gender, clear: { gender: "" } });
   if (Number(filters.minRating)) {
     chips.push({
-      key: 'rating',
+      key: "rating",
       label: `${filters.minRating}★ & above`,
       clear: { minRating: 0 },
     });

@@ -13,6 +13,7 @@ import RoomTypesTable from "../components/RoomTypesTable";
 import AboutHostel from "../components/AboutHostel";
 import HouseRulesAndLocation from "../components/HouseRulesAndLocation";
 import ReviewsSection from "../components/ReviewsSection";
+import ReviewForm from "../../reviews/components/ReviewForm";
 import StickySidebar from "../components/StickySidebar";
 
 export default function HostelDetails() {
@@ -135,6 +136,13 @@ return (
         />
 
         <ReviewsSection reviews={hostel.reviews} />
+
+<ReviewForm
+  hostelId={hostel._id}
+  onReviewSubmitted={(newReview) => {
+    console.log("New review:", newReview);
+  }}
+/>
       </div>
 
       {/* Right Sidebar */}

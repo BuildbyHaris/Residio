@@ -1,41 +1,65 @@
 // src/modules/findHostel/constants/find.constants.js
 
 export const SORT_OPTIONS = [
-  { value: "newest", label: "Newest First" },
-  { value: "price_asc", label: "Price: Low to High" },
-  { value: "price_desc", label: "Price: High to Low" },
-  { value: "rating", label: "Highest Rated" },
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "price_low", label: "Price Low to High" },
+  { value: "price_high", label: "Price High to Low" },
 ];
 
 export const GENDER_OPTIONS = [
-  { value: "boys", label: "Boys" },
-  { value: "girls", label: "Girls" },
-  { value: "coed", label: "Co-ed" },
+  { value: "Boys", label: "Boys" },
+  { value: "Girls", label: "Girls" },
+  { value: "Co-ed", label: "Co-ed" },
 ];
 
 export const BUDGET_PRESETS = [
-  { label: "Under ₹5,000", min: 0, max: 5000 },
-  { label: "₹5,000 – ₹10,000", min: 5000, max: 10000 },
-  { label: "₹10,000+", min: 10000, max: 100000 },
+  { label: "Under RS 5,000", min: 0, max: 5000 },
+  { label: "RS5,000 – RS 10,000", min: 5000, max: 10000 },
+  { label: "RS 10,000+", min: 10000, max: 100000 },
 ];
 
 export const AMENITIES = [
-  { value: "wifi", label: "WiFi", icon: "Wifi" },
-  { value: "laundry", label: "Laundry", icon: "Shirt" },
-  { value: "food", label: "Food / Mess", icon: "Utensils" },
-  { value: "parking", label: "Parking", icon: "ParkingCircle" },
-  { value: "ac", label: "AC", icon: "Snowflake" },
-  { value: "security", label: "24/7 Security", icon: "Shield" },
-  { value: "power_backup", label: "Power Backup", icon: "Zap" },
-  { value: "hot_water", label: "Hot Water", icon: "Droplet" },
-  { value: "cctv", label: "CCTV Surveillance", icon: "Camera" },
-  { value: "housekeeping", label: "Housekeeping", icon: "Sparkles" },
-  { value: "study_room", label: "Study Room", icon: "BookOpen" },
-  { value: "gym", label: "Gym", icon: "Dumbbell" },
-  { value: "ro_water", label: "RO Water", icon: "GlassWater" },
-  { value: "attached_bathroom", label: "Attached Bathroom", icon: "Bath" },
-  { value: "tv", label: "TV / Common Lounge", icon: "Tv" },
-  { value: "elevator", label: "Elevator", icon: "MoveVertical" },
+  {
+    value: "WiFi",
+    label: "WiFi",
+    icon: "Wifi",
+  },
+  {
+    value: "Food",
+    label: "Food",
+    icon: "Utensils",
+  },
+  {
+    value: "Laundry",
+    label: "Laundry",
+    icon: "Shirt",
+  },
+  {
+    value: "Parking",
+    label: "Parking",
+    icon: "ParkingCircle",
+  },
+  {
+    value: "AC",
+    label: "AC",
+    icon: "Snowflake",
+  },
+  {
+    value: "Security",
+    label: "Security",
+    icon: "Shield",
+  },
+  {
+    value: "Power Backup",
+    label: "Power Backup",
+    icon: "Zap",
+  },
+  {
+    value: "Hot Water",
+    label: "Hot Water",
+    icon: "Droplet",
+  },
 ];
 
 export const RATING_OPTIONS = [
@@ -44,7 +68,7 @@ export const RATING_OPTIONS = [
 ];
 
 export const PRICE_RANGE = {
-  MIN: 3000,
+  MIN: 0,
   MAX: 20000,
 };
 
