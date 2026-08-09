@@ -22,7 +22,10 @@ function StayCard({ id, image, title, location, amenities, rating, reviewCount, 
   return (
     <div
       className="bg-white rounded-2xl shadow-md border border-border-light overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
-      onClick={() => navigate(`/hostels/${id}`)}
+      onClick={() => {
+  console.log("Card Clicked", id);
+  navigate(`/hostel/${id}`);
+}}
     >
       {/* Image */}
       <div className="relative aspect-[4/3]">

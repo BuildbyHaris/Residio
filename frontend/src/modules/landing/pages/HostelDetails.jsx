@@ -37,9 +37,9 @@ const fetchHostel = async () => {
 
   try {
     const res = await getHostelByIdApi(id);
-
+    console.log("Full Response:", res.data);
     if (isMounted) {
-      setHostel(res.data.data);
+      setHostel(res.data.data.hostel);
     }
   } catch (err) {
     if (isMounted) {
